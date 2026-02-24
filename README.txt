@@ -1,42 +1,47 @@
-Twenty by HTML5 UP
-html5up.net | @ajlkn
-Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+# vUSCG Public Website
 
+Static website for **vUSCG.com** (public-facing site), managed with GitHub and edited locally in VS Code.
 
-This is Twenty, a minimal, multi-page responsive site template for HTML5 UP.
+## Overview
 
-As the name implies, this is my twentieth (!) design for HTML5 UP. Since the last
-few have been single page affairs, I decided to go with something a bit more conventional
-and threw in four extra page layouts. Beyond that, it's the usual drill: fully responsive,
-built on HTML5/CSS3, and CCA licensed like all my other stuff. Sass sources are also
-included for those of you into that sort of thing (entirely optional).
+This repository contains the **public HTML/CSS/JS website** for vUSCG.
 
-Special thanks to Michael Domaradzki (md.photomerchant.net) for allowing me to use
-his excellent photos in Twenty's demo*.
+It includes:
+- Static HTML pages
+- Site assets (CSS, JS, fonts)
+- Images used by the public site
 
-(* = Not included! Only meant for use with my own on-site demo, so please do NOT download
-and/or use any of Michael's work without his explicit permission!)
+It does **not** include the crew portal / phpVMS site (hosted separately).
 
-AJ
-aj@lkn.io | @ajlkn
+## Live Site
 
-PS: Not sure how to get that contact form working? Give formspree.io a try (it's awesome).
+- Public Website: https://vuscg.com
+- Crew Portal (separate system): https://crew.vuscg.com
 
+## Tech Stack
 
-Credits:
+- HTML5
+- CSS
+- JavaScript
+- cPanel hosting (live deployment)
 
-	Demo Images:
-		Michael Domaradzki (md.photomerchant.net)
-			"Night Vision"
-			"At the Station II"
-			"Airchitecture II"
-			"Livewires II"
-			"Midnite Xpress I"
+## Project Structure
 
-	Icons:
-		Font Awesome (fontawesome.io)
-
-	Other:
-		jQuery (jquery.com)
-		Scrollex (github.com/ajlkn/jquery.scrollex)
-		Responsive Tools (github.com/ajlkn/responsive-tools)
+```text
+.
+├── index.html
+├── about.html
+├── staff.html
+├── partners.html
+├── sop.html
+├── training.html
+├── fleet.html
+├── districts.html
+├── 2025.html
+├── assets/
+│   ├── css/
+│   ├── js/
+│   └── webfonts/
+├── images/
+├── .htaccess          # optional / host-specific
+└── .gitignore
