@@ -1,0 +1,1099 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>vUSCG • 2025 At a Glance</title>
+  <meta name="description" content="In calendar year 2025, 82 unique vUSCG pilots logged over 2,100 flights totaling over 3,300 hours." />
+
+  <style>
+    :root{
+      --max: 1100px;
+      --radius: 16px;
+      --border: rgba(255,255,255,.14);
+      --muted: rgba(255,255,255,.72);
+      --soft: rgba(0,0,0,.24);
+    }
+
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height:1.4;
+      background: #0b1220;
+      color: #fff;
+    }
+
+    /* If your site already provides a header/nav, keep it and just place this <main> below it. */
+    main{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 34px 16px 70px;
+    }
+
+    .hero{
+      border-radius: calc(var(--radius) + 8px);
+      border: 1px solid var(--border);
+      background:
+        radial-gradient(1200px 380px at 10% 10%, rgba(88,154,255,.25), transparent 60%),
+        radial-gradient(900px 320px at 90% 0%, rgba(120,255,214,.12), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: 0 18px 70px rgba(0,0,0,.35);
+      padding: 26px 22px 22px;
+    }
+
+    .kicker{
+      display:inline-block;
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: rgba(255,255,255,.03);
+    }
+
+    h1{
+      margin: 12px 0 8px;
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1.05;
+    }
+
+    .lead{
+      margin: 0;
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 72ch;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .card{
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.04);
+      box-shadow: 0 10px 28px rgba(0,0,0,.25);
+      padding: 14px 14px 12px;
+    }
+
+    .span-3{ grid-column: span 3; }
+    .span-4{ grid-column: span 4; }
+    .span-6{ grid-column: span 6; }
+    .span-12{ grid-column: span 12; }
+
+    .label{
+      font-size: 12px;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .value{
+      margin-top: 8px;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .sub{
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+/* === Bars (aligned starts) === */
+.barRow{
+  display: grid;
+  grid-template-columns: var(--labelW, 62px) 1fr var(--valueW, 72px); /* label | bar | hours */
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.barLabel{
+  font-weight: 800;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.barWrap{
+  position: relative; /* IMPORTANT: keeps barFill contained */
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+.barFill{
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 50%; /* default if no inline width */
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(88,154,255,.9), rgba(120,255,214,.8));
+}
+
+.barValue{
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* Optional: tighten on phones */
+@media (max-width: 520px){
+  .barRow{ grid-template-columns: 1fr; }
+  .barValue{ text-align: left; }
+}
+
+
+
+    .ctaRow{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 14px;
+      align-items:center;
+    }
+
+    .btn{
+      display:inline-block;
+      text-decoration:none;
+      font-weight: 800;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      color:#fff;
+      box-shadow: 0 10px 26px rgba(0,0,0,.28);
+    }
+
+    .btn:hover{ background: rgba(255,255,255,.10); }
+
+    .fine{
+      font-size: 12px;
+      color: rgba(255,255,255,.62);
+      margin: 10px 0 0;
+    }
+
+    details{
+      margin-top: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 14px;
+      background: rgba(255,255,255,.03);
+      padding: 10px 12px;
+    }
+    summary{
+      cursor: pointer;
+      font-weight: 800;
+      color: #fff;
+      list-style: none;
+    }
+    summary::-webkit-details-marker{ display:none; }
+
+    .embedWrap{
+      margin-top: 12px;
+      border-radius: 12px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+    }
+    iframe{
+      width:100%;
+      height: 72vh;
+      border:0;
+      display:block;
+      background:#fff;
+    }
+
+    @media (max-width: 900px){
+      .span-3, .span-4, .span-6{ grid-column: span 12; }
+    }
+    
+/* === Full-page loader overlay (MANUAL dismiss) === */
+#pageLoader{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: rgba(11,18,32,.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: opacity .45s ease, visibility .45s ease;
+}
+
+#pageLoader .loaderInner{
+  width: min(520px, 92vw);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 18px;
+  background: rgba(255,255,255,.04);
+  box-shadow: 0 18px 70px rgba(0,0,0,.35);
+  padding: 18px 18px 16px;
+}
+
+/* typing line */
+#pageLoader .typing{
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  font-size: 18px;
+  color: #fff;
+
+  display: inline-block; /* IMPORTANT: makes width animation work */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid rgba(255,255,255,.85);
+  width: 0;
+
+  /* Slow it down here */
+  --typeDur: 4.8s;
+  --caretDur: 0.95s;
+
+  animation:
+    typing var(--typeDur) steps(var(--n, 20)) 1 forwards,
+    caret var(--caretDur) step-end infinite;
+}
+
+#pageLoader .subline{
+  margin-top: 10px;
+  font-size: 13px;
+  color: rgba(255,255,255,.70);
+}
+
+#pageLoader .progress{
+  margin-top: 12px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.10);
+  overflow: hidden;
+}
+#pageLoader .progress > div{
+  height: 100%;
+  width: 40%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(88,154,255,.9), rgba(120,255,214,.8));
+  animation: sweep 5.5s ease-in-out infinite alternate;
+}
+
+/* Button: hidden until page is actually loaded */
+#enterSiteBtn{
+  margin-top: 14px;
+  width: 100%;
+  display: none;                /* shown when ready */
+  cursor: pointer;
+  font-weight: 900;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.06);
+  color:#fff;
+  box-shadow: 0 10px 26px rgba(0,0,0,.28);
+}
+#enterSiteBtn:hover{ background: rgba(255,255,255,.10); }
+
+#pageLoader.is-ready #enterSiteBtn{ display: inline-block; }
+
+#pageLoader .fineHint{
+  margin-top: 10px;
+  font-size: 12px;
+  color: rgba(255,255,255,.62);
+}
+
+#pageLoader.is-done{
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@keyframes typing{
+  from { width: 0; }
+  to   { width: calc(var(--n, 20) * 1ch); }
+}
+@keyframes caret{
+  50% { border-right-color: transparent; }
+}
+@keyframes sweep{
+  from { transform: translateX(-10%); }
+  to   { transform: translateX(140%); }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  #pageLoader .typing{
+    animation: none;
+    width: auto;
+    border-right: none;
+  }
+  #pageLoader .progress > div{
+    animation: none;
+    width: 100%;
+  }
+}
+
+  </style>
+</head>
+
+<body>
+
+<!-- Loader Overlay (manual dismiss) -->
+<div id="pageLoader" role="dialog" aria-modal="true" aria-label="Loading 2025 stats">
+  <div class="loaderInner">
+    <div class="typing" id="loaderTyping">Loading vUSCG 2025 stats…</div>
+    <div class="subline">Press Enter or click when ready.</div>
+
+    <div class="progress" aria-hidden="true"><div></div></div>
+
+    <button id="enterSiteBtn" class="enterBtn" type="button">
+      Click to view 2025 stats →
+    </button>
+
+    <div class="fineHint">Tip: you can also press <strong>Enter</strong> or <strong>Space</strong>.</div>
+  </div>
+</div>
+
+  <!-- If your site uses a shared header/nav, it will appear above this <main>. -->
+
+  <main>
+    <section class="hero">
+      <span class="kicker">2025 At a Glance</span>
+      <h1>vUSCG 2025 Stats</h1>
+      <p class="lead">
+        In calendar year 2025, <strong>82 unique vUSCG pilots</strong> logged over <strong>2,100 flights</strong> totaling over <strong>3,300 hours</strong>.
+        The most flown airframe was the <strong>H60</strong> with <strong>1,150 hours</strong>, followed by the <strong>C30J</strong> with <strong>825 hours</strong>.
+      </p>
+
+      <div class="grid" aria-label="Key stats">
+        <div class="card span-3">
+          <div class="label">Pilots</div>
+          <div class="value">82</div>
+          <div class="sub">Unique pilots who logged in 2025</div>
+        </div>
+        
+        <div class="card span-3">
+          <div class="label">Flights</div>
+          <div class="value">2,100+</div>
+          <div class="sub">Total flights logged in 2025</div>
+        </div>
+
+        
+
+        <div class="card span-3">
+          <div class="label">Hours</div>
+          <div class="value">3,300+</div>
+          <div class="sub">Total flight hours logged in 2025</div>
+        </div>
+
+        <div class="card span-3">
+  <div class="label">Top Airframes by Hours</div>
+
+  <div class="barRow" aria-label="H60 hours">
+    <div class="barLabel">H60</div>
+    <div class="barWrap"><div class="barFill" style="width:100%"></div></div>
+    <div class="barValue">1,150h</div>
+  </div>
+
+  <div class="barRow" aria-label="C30J hours">
+    <div class="barLabel">C30J</div>
+    <div class="barWrap"><div class="barFill" style="width:71.7%"></div></div>
+    <div class="barValue">825h</div>
+  </div>
+
+  <div class="sub">Most flown airframes (by hours)</div>
+</div>
+
+
+
+<div class="card span-12">
+  <div class="label">Explore the Fleet</div>
+  <p class="sub" style="margin:10px 0 12px;">
+    Want to see the full operational fleet lineup and aircraft details?
+  </p>
+  <a class="btn" href="/fleet.html">View the vUSCG Fleet →</a>
+</div>
+<div class="card span-12">
+  <div class="label">Training & Operations</div>
+
+  <p class="sub" style="margin:10px 0 10px; max-width: 90ch;">
+    Initial VSOA vUSCG training gets a pilot into either <strong>Rotary Wing</strong> or
+    <strong>Fixed Wing</strong>. Once rated, they can cross qualify into the other. These form the
+    building blocks of the vUSCG experience.
+  </p>
+
+  <p class="sub" style="margin:0 0 10px; max-width: 90ch;">
+    On top of these, we offer advanced and specialty operations including:
+  </p>
+
+  <ul style="margin:0; padding-left: 18px; color: rgba(255,255,255,.78);">
+    <li><strong>Helicopter Interdiction Tactical Squadron (HITRON)</strong></li>
+    <li><strong>North American Aerospace Defence Command (NORAD) Blackjack</strong> in the D.C. SFRA and other TFRs</li>
+    <li><strong>MQ-9B SeaGuardian</strong></li>
+    <li><strong>Shipborne Operations</strong></li>
+  </ul>
+
+</div>
+
+<div class="card span-12">
+  <div class="label">Expectation & Operating Environment</div>
+  <p class="sub" style="margin:10px 0 0; max-width: 95ch;">
+    As VSO Certified Pilots, we are expected to fly on the VATSIM network with a level of proficiency and confidence
+    expected from the organization. We operate in all classes of airspace, with and without Air Traffic Control provided,
+    and intermingle with non-VSOA pilots.
+  </p>
+  <p class="sub" style="margin:10px 0 0; max-width: 95ch;">
+    We are proud of our reputation on the VATSIM network.
+  </p>
+</div>
+<div class="card span-12">
+  <div class="label">Annual Operations Cycle</div>
+
+  <p class="sub" style="margin:10px 0 12px; max-width: 95ch;">
+    Commencing in August 2025, vUSCG developed a rotating monthly operations cycle focused on specific ARTCCs and districts.
+  </p>
+
+  <div style="
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(0,0,0,.18);
+  ">
+    <div style="
+      display: grid;
+      grid-template-columns: 110px 1fr 1fr;
+      gap: 10px;
+      padding: 10px 12px;
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.70);
+      background: rgba(255,255,255,.05);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    ">
+      <div>Month</div><div>District</div><div>Operation</div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 110px 1fr 1fr; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+      <div style="font-weight:800;">August</div><div style="color: rgba(255,255,255,.78);">Arctic District</div><div style="color: rgba(255,255,255,.78);">Northern Watch</div>
+    </div>
+    <div style="display:grid; grid-template-columns: 110px 1fr 1fr; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+      <div style="font-weight:800;">September</div><div style="color: rgba(255,255,255,.78);">North East District</div><div style="color: rgba(255,255,255,.78);">Marblehead</div>
+    </div>
+    <div style="display:grid; grid-template-columns: 110px 1fr 1fr; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+      <div style="font-weight:800;">October</div><div style="color: rgba(255,255,255,.78);">South East District</div><div style="color: rgba(255,255,255,.78);">Storm Sentinel</div>
+    </div>
+    <div style="display:grid; grid-template-columns: 110px 1fr 1fr; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+      <div style="font-weight:800;">November</div><div style="color: rgba(255,255,255,.78);">South West District</div><div style="color: rgba(255,255,255,.78);">Western Watch</div>
+    </div>
+    <div style="display:grid; grid-template-columns: 110px 1fr 1fr; gap:10px; padding: 10px 12px;">
+      <div style="font-weight:800;">December</div><div style="color: rgba(255,255,255,.78);">North West District</div><div style="color: rgba(255,255,255,.78);">Evergreen Shield</div>
+    </div>
+  </div>
+
+  <p class="sub" style="margin:12px 0 0; max-width: 95ch;">
+    These cycles proved successful, supporting increased VATSIM ARTCC participation and vUSCG activity.
+  </p>
+</div>
+
+
+<div class="card span-12">
+  <div class="label">Annual VSOA Exercise</div>
+
+  <p class="sub" style="margin:10px 0 12px; max-width: 95ch;">
+    As part of our commitment to VSOA, vUSCG hosted an annual exercise in October.
+    <strong>Operation Hurricane Deez</strong> focused on support to the people of The Bahamas following a hurricane.
+    The exercise was advertised on VSOA Discord and included participation from USNv, vPEAK, RAAfV, and vAFFU.
+  </p>
+
+  <div style="display:grid; grid-template-columns: repeat(12, 1fr); gap:14px; margin-top: 10px;">
+    <div class="card span-4" style="background: rgba(255,255,255,.03);">
+      <div class="label">Virtual Lives Rescued</div>
+      <div class="value">1,514</div>
+      <div class="sub">During the exercise</div>
+    </div>
+
+    <div class="card span-4" style="background: rgba(255,255,255,.03);">
+      <div class="label">Responders Delivered</div>
+      <div class="value">200</div>
+      <div class="sub">To support operations</div>
+    </div>
+
+    <div class="card span-4" style="background: rgba(255,255,255,.03);">
+      <div class="label">Supplies Delivered</div>
+      <div class="value">139K lb</div>
+      <div class="sub">Water, fuel, food, and supplies</div>
+    </div>
+  </div>
+
+  <p class="sub" style="margin:14px 0 10px;">
+    Flights undertaken by each group:
+  </p>
+
+  <div style="
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(0,0,0,.18);
+  ">
+    <div style="
+      display:grid;
+      grid-template-columns: 1fr 110px;
+      gap: 10px;
+      padding: 10px 12px;
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.70);
+      background: rgba(255,255,255,.05);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    ">
+      <div>Group</div><div style="text-align:right;">Flights</div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 110px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+      <div style="font-weight:800;">USNv</div><div style="text-align:right; color: rgba(255,255,255,.78);">13</div>
+    </div>
+    <div style="display:grid; grid-template-columns: 1fr 110px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+      <div style="font-weight:800;">vPEAK</div><div style="text-align:right; color: rgba(255,255,255,.78);">11</div>
+    </div>
+    <div style="display:grid; grid-template-columns: 1fr 110px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+      <div style="font-weight:800;">vAFFU</div><div style="text-align:right; color: rgba(255,255,255,.78);">7</div>
+    </div>
+    <div style="display:grid; grid-template-columns: 1fr 110px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+      <div style="font-weight:800;">RAAfV</div><div style="text-align:right; color: rgba(255,255,255,.78);">4</div>
+    </div>
+    <div style="display:grid; grid-template-columns: 1fr 110px; gap:10px; padding: 10px 12px;">
+      <div style="font-weight:800;">vUSCG</div><div style="text-align:right; color: rgba(255,255,255,.78);">30</div>
+    </div>
+  </div>
+
+  <p class="sub" style="margin:12px 0 0; max-width: 95ch;">
+    vUSCG utilized a Sector Controller during the event, enabling experienced members to provide operational control for tasking via a Discord voice room.
+    Miami ARTCC also provided ATCOs during the exercise.
+  </p>
+</div>
+
+<div class="card span-12">
+  <div class="label">Most Flights in 2025</div>
+
+  <div style="
+    margin-top: 12px;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(0,0,0,.18);
+  ">
+    <div style="
+      display:grid;
+      grid-template-columns: 70px 110px 1fr 120px;
+      gap: 10px;
+      padding: 10px 12px;
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.70);
+      background: rgba(255,255,255,.05);
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    ">
+      <div>#</div>
+      <div>Pilot</div>
+      <div>Name</div>
+      <div style="text-align:right;">Flights</div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 70px 110px 1fr 120px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+      <div style="font-weight:800;">1</div><div style="font-weight:800;">C3</div><div style="color: rgba(255,255,255,.78);">Ron W</div><div style="text-align:right; color: rgba(255,255,255,.78); font-weight:800;">303</div>
+    </div>
+    <div style="display:grid; grid-template-columns: 70px 110px 1fr 120px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+      <div style="font-weight:800;">2</div><div style="font-weight:800;">C3051</div><div style="color: rgba(255,255,255,.78);">Hunter L</div><div style="text-align:right; color: rgba(255,255,255,.78); font-weight:800;">198</div>
+    </div>
+    <div style="display:grid; grid-template-columns: 70px 110px 1fr 120px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+      <div style="font-weight:800;">3</div><div style="font-weight:800;">C3047</div><div style="color: rgba(255,255,255,.78);">Justin B</div><div style="text-align:right; color: rgba(255,255,255,.78); font-weight:800;">160</div>
+    </div>
+    <div style="display:grid; grid-template-columns: 70px 110px 1fr 120px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+      <div style="font-weight:800;">4</div><div style="font-weight:800;">C3027</div><div style="color: rgba(255,255,255,.78);">Justin C</div><div style="text-align:right; color: rgba(255,255,255,.78); font-weight:800;">96</div>
+    </div>
+    <div style="display:grid; grid-template-columns: 70px 110px 1fr 120px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+      <div style="font-weight:800;">5</div><div style="font-weight:800;">C1</div><div style="color: rgba(255,255,255,.78);">Sean C</div><div style="text-align:right; color: rgba(255,255,255,.78); font-weight:800;">95</div>
+    </div>
+    <div style="display:grid; grid-template-columns: 70px 110px 1fr 120px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+      <div style="font-weight:800;">6</div><div style="font-weight:800;">C3048</div><div style="color: rgba(255,255,255,.78);">Eli B</div><div style="text-align:right; color: rgba(255,255,255,.78); font-weight:800;">83</div>
+    </div>
+    <div style="display:grid; grid-template-columns: 70px 110px 1fr 120px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+      <div style="font-weight:800;">7</div><div style="font-weight:800;">C3119</div><div style="color: rgba(255,255,255,.78);">Brennan V</div><div style="text-align:right; color: rgba(255,255,255,.78); font-weight:800;">81</div>
+    </div>
+    <div style="display:grid; grid-template-columns: 70px 110px 1fr 120px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+      <div style="font-weight:800;">8</div><div style="font-weight:800;">C3104</div><div style="color: rgba(255,255,255,.78);">Travis T</div><div style="text-align:right; color: rgba(255,255,255,.78); font-weight:800;">80</div>
+    </div>
+    <div style="display:grid; grid-template-columns: 70px 110px 1fr 120px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+      <div style="font-weight:800;">9</div><div style="font-weight:800;">C3037</div><div style="color: rgba(255,255,255,.78);">Josh A</div><div style="text-align:right; color: rgba(255,255,255,.78); font-weight:800;">71</div>
+    </div>
+    <div style="display:grid; grid-template-columns: 70px 110px 1fr 120px; gap:10px; padding: 10px 12px;">
+      <div style="font-weight:800;">10</div><div style="font-weight:800;">C3031</div><div style="color: rgba(255,255,255,.78);">Austin S</div><div style="text-align:right; color: rgba(255,255,255,.78); font-weight:800;">63</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="card span-12">
+  <div class="label">Landing Rates • 2025</div>
+  <p class="sub" style="margin:10px 0 0; max-width:95ch;">
+    A quick snapshot of landing rate extremes captured in 2025. Lower values generally indicate smoother landings.
+  </p>
+
+  <div style="display:grid; grid-template-columns: repeat(12, 1fr); gap:14px; margin-top: 12px;">
+    <!-- Smoothest -->
+    <div class="card span-6" style="background: rgba(255,255,255,.03);">
+      <div class="label">Top Five Lowest Landing Rates</div>
+      <div class="sub" style="margin-top:8px;">(commendable)</div>
+
+      <div style="
+        margin-top: 10px;
+        border: 1px solid rgba(255,255,255,.14);
+        border-radius: 14px;
+        overflow: hidden;
+        background: rgba(0,0,0,.18);
+      ">
+        <div style="display:grid; grid-template-columns: 90px 1fr; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+          <div style="font-weight:800;">1 ft/min</div><div style="color: rgba(255,255,255,.78);">Sean C &amp; Ron W</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 90px 1fr; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+          <div style="font-weight:800;">3 ft/min</div><div style="color: rgba(255,255,255,.78);">Brad M</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 90px 1fr; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+          <div style="font-weight:800;">4 ft/min</div><div style="color: rgba(255,255,255,.78);">Brennan V</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 90px 1fr; gap:10px; padding: 10px 12px;">
+          <div style="font-weight:800;">5 ft/min</div><div style="color: rgba(255,255,255,.78);">Ex-members</div>
+        </div>
+      </div>
+
+      <p class="fine" style="margin-top:10px;">
+        (Landing rates shown are the best recorded values — not an average.)
+      </p>
+    </div>
+
+    <!-- Hardest -->
+    <div class="card span-6" style="background: rgba(255,255,255,.03);">
+      <div class="label">Top Five Highest Landing Rates</div>
+      <div class="sub" style="margin-top:8px;">(not commendable)</div>
+
+      <div style="
+        margin-top: 10px;
+        border: 1px solid rgba(255,255,255,.14);
+        border-radius: 14px;
+        overflow: hidden;
+        background: rgba(0,0,0,.18);
+      ">
+        <div style="display:grid; grid-template-columns: 1fr; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+          <div style="color: rgba(255,255,255,.78);">
+            <strong>21,337 ft/min</strong> <span style="color: rgba(255,255,255,.62);">(must have been a crash)</span>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+          <div style="color: rgba(255,255,255,.78);">
+            <strong>7,000 – 6,000 ft/min</strong> <span style="color: rgba(255,255,255,.62);">• three pilots remain nameless</span>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+          <div style="color: rgba(255,255,255,.78);">
+            <strong>6,000 – 5,000 ft/min</strong> <span style="color: rgba(255,255,255,.62);">• one nameless pilot</span>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+          <div style="color: rgba(255,255,255,.78);">
+            <strong>5,000 – 2,000 ft/min</strong> <span style="color: rgba(255,255,255,.62);">• ten pilots, with a couple repeat offenders</span>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr; gap:10px; padding: 10px 12px;">
+          <div style="color: rgba(255,255,255,.78);">
+            <strong>2,000 – 1,000 ft/min</strong> <span style="color: rgba(255,255,255,.62);">• fourteen pilots, with some repeat offenders</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="fine" style="margin-top:10px;">
+        (These are extreme values and can be affected by sim glitches, hard touchdowns, or unusual scenarios.)
+      </p>
+    </div>
+  </div>
+</div>
+
+
+<div class="card span-12">
+  <div class="label">Pilot Hours • 2025</div>
+
+  <div style="display:grid; grid-template-columns: repeat(12, 1fr); gap:14px; margin-top: 12px;">
+    <!-- Leaderboard -->
+    <div class="card span-6" style="background: rgba(255,255,255,.03);">
+      <div class="label">Top Pilot Hours</div>
+
+      <div style="
+        margin-top: 10px;
+        border: 1px solid rgba(255,255,255,.14);
+        border-radius: 14px;
+        overflow: hidden;
+        background: rgba(0,0,0,.18);
+      ">
+        <div style="
+          display:grid;
+          grid-template-columns: 110px 1fr 90px;
+          gap: 10px;
+          padding: 10px 12px;
+          font-size: 12px;
+          letter-spacing: .08em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,.70);
+          background: rgba(255,255,255,.05);
+          border-bottom: 1px solid rgba(255,255,255,.12);
+        ">
+          <div>Pilot</div><div>Name</div><div style="text-align:right;">Hours</div>
+        </div>
+
+        <!-- Top rows -->
+        <div style="display:grid; grid-template-columns: 110px 1fr 90px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+          <div style="font-weight:800;">C03</div><div style="color: rgba(255,255,255,.78);">Ron W</div><div style="text-align:right; color: rgba(255,255,255,.78);">504</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 110px 1fr 90px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+          <div style="font-weight:800;">C3051</div><div style="color: rgba(255,255,255,.78);">Hunter L</div><div style="text-align:right; color: rgba(255,255,255,.78);">430</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 110px 1fr 90px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+          <div style="font-weight:800;">C3047</div><div style="color: rgba(255,255,255,.78);">Justin B</div><div style="text-align:right; color: rgba(255,255,255,.78);">250</div>
+        </div>
+
+        <!-- Rest of list -->
+        <div style="display:grid; grid-template-columns: 110px 1fr 90px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+          <div style="font-weight:800;">C3027</div><div style="color: rgba(255,255,255,.78);">Justin C</div><div style="text-align:right; color: rgba(255,255,255,.78);">211</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 110px 1fr 90px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+          <div style="font-weight:800;">C02</div><div style="color: rgba(255,255,255,.78);">Sean H</div><div style="text-align:right; color: rgba(255,255,255,.78);">165</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 110px 1fr 90px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+          <div style="font-weight:800;">C3119</div><div style="color: rgba(255,255,255,.78);">Brennan V</div><div style="text-align:right; color: rgba(255,255,255,.78);">153</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 110px 1fr 90px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+          <div style="font-weight:800;">C01</div><div style="color: rgba(255,255,255,.78);">Sean C</div><div style="text-align:right; color: rgba(255,255,255,.78);">152</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 110px 1fr 90px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+          <div style="font-weight:800;">C3104</div><div style="color: rgba(255,255,255,.78);">Travis T</div><div style="text-align:right; color: rgba(255,255,255,.78);">74</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 110px 1fr 90px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+          <div style="font-weight:800;">C3048</div><div style="color: rgba(255,255,255,.78);">Eli B</div><div style="text-align:right; color: rgba(255,255,255,.78);">72</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 110px 1fr 90px; gap:10px; padding: 10px 12px;">
+          <div style="font-weight:800;">C3031</div><div style="color: rgba(255,255,255,.78);">Austin S</div><div style="text-align:right; color: rgba(255,255,255,.78);">62</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buckets -->
+    <div class="card span-6" style="background: rgba(255,255,255,.03);">
+      <div class="label">More Pilot Hour Brackets</div>
+
+      <div style="margin-top: 10px; display:grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div style="border: 1px solid rgba(255,255,255,.14); border-radius: 14px; padding: 10px 12px; background: rgba(0,0,0,.18);">
+          <div class="label">Under 25 hrs</div>
+          <div class="sub" style="margin-top:8px; line-height:1.7;">
+            C3086 • C2124 • C3085 • C3022 • C3023 • C2025 • C3045 • C2040 • C3073 • C3053
+          </div>
+        </div>
+
+        <div style="border: 1px solid rgba(255,255,255,.14); border-radius: 14px; padding: 10px 12px; background: rgba(0,0,0,.18);">
+          <div class="label">Under 20 hrs</div>
+          <div class="sub" style="margin-top:8px; line-height:1.7;">
+            C3011 • C3056 • C3019 • C3038 • C3107 • C3065 • C3042 • C2026 • C2131 • C3055 • C3077
+          </div>
+        </div>
+
+        <div style="border: 1px solid rgba(255,255,255,.14); border-radius: 14px; padding: 10px 12px; background: rgba(0,0,0,.18);">
+          <div class="label">Under 10 hrs</div>
+          <div class="sub" style="margin-top:8px; line-height:1.7;">
+            C3032 • C3131 • C3141 • C3060 • C3090 • C2041 • C3018 • C3110 • C3016 • C3138 • C3067 • C3099 • C3082 • C3049
+          </div>
+        </div>
+
+        <div style="border: 1px solid rgba(255,255,255,.14); border-radius: 14px; padding: 10px 12px; background: rgba(0,0,0,.18);">
+          <div class="label">Under 5 hrs</div>
+          <div class="sub" style="margin-top:8px; line-height:1.7;">
+            C3103 • C3093 • C3025 • C3094 • C3062 • C3066 • C3064 • C3109 • C3059
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- AIRCRAFT GOODIES / AIRFRAME STATS -->
+<div class="card span-12">
+  <div class="label">Aircraft Activity • 2025</div>
+  <p class="sub" style="margin:10px 0 0; max-width: 95ch;">
+    Core fleet and training fleet hours, most-flown registrations, and the busiest facilities for the year.
+  </p>
+
+  <div style="display:grid; grid-template-columns: repeat(12, 1fr); gap:14px; margin-top: 12px;">
+    <!-- Core Fleet Hours -->
+    <div class="card span-6" style="background: rgba(255,255,255,.03); --labelW: 260px; --valueW: 64px;">
+  <div class="label">Core Fleet Airframe Hours</div>
+
+      <div class="barRow">
+        <div class="barLabel" >Sikorsky MH-60T (H60)</div>
+        <div class="barWrap"><div class="barFill" style="width:100%"></div></div>
+        <div class="barValue">1150h</div>
+      </div>
+
+      <div class="barRow">
+        <div class="barLabel" >Lockheed HC-130J (C30J)</div>
+        <div class="barWrap"><div class="barFill" style="width:71.7%"></div></div>
+        <div class="barValue">825h</div>
+      </div>
+
+      <div class="barRow">
+        <div class="barLabel" >Eurocopter MH-65 (AS65)</div>
+        <div class="barWrap"><div class="barFill" style="width:37.5%"></div></div>
+        <div class="barValue">431h</div>
+      </div>
+
+      <div class="barRow">
+        <div class="barLabel" >Gulfstream C-37A/B (GLF5)</div>
+        <div class="barWrap"><div class="barFill" style="width:22.4%"></div></div>
+        <div class="barValue">258h</div>
+      </div>
+
+      <div class="barRow">
+        <div class="barLabel" >Alenia HC-27J (C27J)</div>
+        <div class="barWrap"><div class="barFill" style="width:11.0%"></div></div>
+        <div class="barValue">127h</div>
+      </div>
+
+      <div class="barRow">
+        <div class="barLabel" >EADS HC-144 (CN35)</div>
+        <div class="barWrap"><div class="barFill" style="width:10.8%"></div></div>
+        <div class="barValue">124h</div>
+      </div>
+
+      <div class="barRow">
+        <div class="barLabel" >GAAS MQ-9B (Q9)</div>
+        <div class="barWrap"><div class="barFill" style="width:6.6%"></div></div>
+        <div class="barValue">76h</div>
+      </div>
+    </div>
+
+    <!-- Training Fleet Hours -->
+    <div class="card span-6" style="background: rgba(255,255,255,.03); --labelW: 260px; --valueW: 64px;">
+  <div class="label">Training Fleet Airframe Hours</div>
+
+      <div class="barRow">
+        <div class="barLabel" >Bell TH-57C (B06)</div>
+        <div class="barWrap"><div class="barFill" style="width:100%"></div></div>
+        <div class="barValue">160h</div>
+      </div>
+
+      <div class="barRow">
+        <div class="barLabel" >Beechcraft T-44 (BE9L)</div>
+        <div class="barWrap"><div class="barFill" style="width:16.3%"></div></div>
+        <div class="barValue">26h</div>
+      </div>
+
+      <div class="barRow">
+        <div class="barLabel" >Beechcraft T-6 (TEX2)</div>
+        <div class="barWrap"><div class="barFill" style="width:15%"></div></div>
+        <div class="barValue">24h</div>
+      </div>
+
+      <div class="barRow">
+        <div class="barLabel" >Lockheed C130J</div>
+        <div class="barWrap"><div class="barFill" style="width:12.5%"></div></div>
+        <div class="barValue">20h</div>
+      </div>
+    </div>
+
+    <!-- Most Flown Registrations -->
+    <div class="card span-6" style="background: rgba(255,255,255,.03);">
+      <div class="label">Most Flown Aircraft Registrations</div>
+
+      <div style="
+        margin-top: 10px;
+        border: 1px solid rgba(255,255,255,.14);
+        border-radius: 14px;
+        overflow: hidden;
+        background: rgba(0,0,0,.18);
+      ">
+        <div style="
+          display:grid;
+          grid-template-columns: 60px 1fr 1fr 90px;
+          gap: 10px;
+          padding: 10px 12px;
+          font-size: 12px;
+          letter-spacing: .08em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,.70);
+          background: rgba(255,255,255,.05);
+          border-bottom: 1px solid rgba(255,255,255,.12);
+        ">
+          <div>#</div><div>Registration</div><div>Type</div><div style="text-align:right;">Hours</div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 60px 1fr 1fr 90px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+          <div style="font-weight:800;">1</div><div style="font-weight:800;">101</div><div style="color: rgba(255,255,255,.78);">C-37A</div><div style="text-align:right; color: rgba(255,255,255,.78);">132</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 60px 1fr 1fr 90px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+          <div style="font-weight:800;">2</div><div style="font-weight:800;">102</div><div style="color: rgba(255,255,255,.78);">C-37B</div><div style="text-align:right; color: rgba(255,255,255,.78);">126</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 60px 1fr 1fr 90px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+          <div style="font-weight:800;">3</div><div style="font-weight:800;">2013</div><div style="color: rgba(255,255,255,.78);">C-30J</div><div style="text-align:right; color: rgba(255,255,255,.78);">118</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 60px 1fr 1fr 90px; gap:10px; padding: 10px 12px;">
+          <div style="font-weight:800;">4</div><div style="font-weight:800;">LCKY01</div><div style="color: rgba(255,255,255,.78);">B06 (trainer)</div><div style="text-align:right; color: rgba(255,255,255,.78);">82</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Highlights + Busiest Facilities -->
+    <div class="card span-6" style="background: rgba(255,255,255,.03);">
+      <div class="label">2025 Aircraft Highlights</div>
+
+      <div style="display:grid; grid-template-columns: repeat(12, 1fr); gap:14px; margin-top: 10px;">
+        <div class="card span-6" style="background: rgba(255,255,255,.03);">
+          <div class="label">AuxAir Hours</div>
+          <div class="value">91h</div>
+          <div class="sub">Additional hours flown in support of the mission</div>
+        </div>
+
+        <div class="card span-6" style="background: rgba(255,255,255,.03);">
+          <div class="label">Longest Flight</div>
+          <div class="value">11h</div>
+          <div class="sub">By registration <strong>2003</strong> (HC-130J)</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 14px;">
+        <div class="label">Most Frequented Facilities</div>
+
+        <div style="
+          margin-top: 10px;
+          border: 1px solid rgba(255,255,255,.14);
+          border-radius: 14px;
+          overflow: hidden;
+          background: rgba(0,0,0,.18);
+        ">
+          <div style="
+            display:grid;
+            grid-template-columns: 60px 1fr 110px;
+            gap: 10px;
+            padding: 10px 12px;
+            font-size: 12px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,.70);
+            background: rgba(255,255,255,.05);
+            border-bottom: 1px solid rgba(255,255,255,.12);
+          ">
+            <div>#</div><div>Facility</div><div style="text-align:right;">Operations</div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 60px 1fr 110px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+            <div style="font-weight:800;">1</div><div style="color: rgba(255,255,255,.78);"><strong>KMOB</strong> (Aviation Training Center)</div><div style="text-align:right; color: rgba(255,255,255,.78);">444</div>
+          </div>
+          <div style="display:grid; grid-template-columns: 60px 1fr 110px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+            <div style="font-weight:800;">2</div><div style="color: rgba(255,255,255,.78);"><strong>KPIE</strong> (CGAS Clearwater)</div><div style="text-align:right; color: rgba(255,255,255,.78);">382</div>
+          </div>
+          <div style="display:grid; grid-template-columns: 60px 1fr 110px; gap:10px; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.10);">
+            <div style="font-weight:800;">3</div><div style="color: rgba(255,255,255,.78);"><strong>KNDZ</strong> (Whiting Field NAS)</div><div style="text-align:right; color: rgba(255,255,255,.78);">328</div>
+          </div>
+          <div style="display:grid; grid-template-columns: 60px 1fr 110px; gap:10px; padding: 10px 12px;">
+            <div style="font-weight:800;">4</div><div style="color: rgba(255,255,255,.78);"><strong>KFMH</strong> (CGAS Cape Cod)</div><div style="text-align:right; color: rgba(255,255,255,.78);">189</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+        <div class="card span-12">
+          
+
+          <!-- OPTIONAL EMBED:
+               This usually works best if the doc is publicly viewable.
+               Use /preview instead of /edit for embedding.
+          -->
+          <details>
+            <summary>Preview the report on this page</summary>
+            <div class="embedWrap">
+              <iframe
+                loading="lazy"
+                src="https://docs.google.com/document/d/1zfiHQT71-_sBm1SQ9IMnUxw3tXJWMG3K/preview"
+                title="vUSCG 2025 stats report preview">
+              </iframe>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+    <div class="card span-12">
+  <div class="label"> </div>
+ 
+  <a class="btn" href="/index.html">Return to Home →</a>
+</div>
+  </main>
+<script>
+(() => {
+  const loader = document.getElementById('pageLoader');
+  const btn = document.getElementById('enterSiteBtn');
+  const typing = document.getElementById('loaderTyping');
+
+  if (!loader || !btn) return;
+
+  // Lock scroll while overlay is up
+  const prevOverflow = document.body.style.overflow;
+  document.body.style.overflow = 'hidden';
+
+  // Set --n to match the text length so steps align with characters
+  if (typing) {
+    const txt = (typing.textContent || '').trim();
+    typing.style.setProperty('--n', txt.length);
+  }
+
+  const dismiss = () => {
+    loader.classList.add('is-done');
+    document.body.style.overflow = prevOverflow || '';
+    // optional: remove from DOM after fade
+    setTimeout(() => loader.remove(), 600);
+  };
+
+  // Mark ready once the page is loaded (button appears)
+  window.addEventListener('load', () => {
+    loader.classList.add('is-ready');
+    btn.focus();
+  });
+
+  btn.addEventListener('click', dismiss);
+
+  // Enter/Space to dismiss
+  window.addEventListener('keydown', (e) => {
+    if (loader.classList.contains('is-done')) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      dismiss();
+    }
+  });
+})();
+</script>
+
+
+
+</body>
+</html>
