@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 deployment:
   tasks:
@@ -14,3 +15,6 @@ deployment:
     - /bin/cp .htaccess $DEPLOYPATH
     - /bin/cp -R assets $DEPLOYPATH
     - /bin/cp -R images $DEPLOYPATH
+=======
+
+>>>>>>> 08b021eee530db8676997d948ed69850da76e545
