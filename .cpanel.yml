@@ -1,0 +1,20 @@
+<<<<<<< HEAD
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/vuscgco1/public_html/
+    - /bin/cp index.html $DEPLOYPATH
+    - /bin/cp about.html $DEPLOYPATH
+    - /bin/cp staff.html $DEPLOYPATH
+    - /bin/cp partners.html $DEPLOYPATH
+    - /bin/cp sop.html $DEPLOYPATH
+    - /bin/cp training.html $DEPLOYPATH
+    - /bin/cp fleet.html $DEPLOYPATH
+    - /bin/cp districts.html $DEPLOYPATH
+    - /bin/cp 2025.html $DEPLOYPATH
+    - /bin/cp .htaccess $DEPLOYPATH
+    - /bin/cp -R assets $DEPLOYPATH
+    - /bin/cp -R images $DEPLOYPATH
+=======
+
+>>>>>>> 08b021eee530db8676997d948ed69850da76e545
