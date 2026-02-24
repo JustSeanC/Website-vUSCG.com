@@ -45,3 +45,13 @@ It does **not** include the crew portal / phpVMS site (hosted separately).
 ├── images/
 ├── .htaccess          # optional / host-specific
 └── .gitignore
+
+
+## Shared Navigation
+
+Navigation links are now centralized in `assets/js/site-nav.js`.
+
+- Every page still contains `<nav id="nav"></nav>` in the header.
+- `site-nav.js` replaces the contents of that nav at load time.
+- To add/remove/reorder top navigation items, edit only `assets/js/site-nav.js`.
+
