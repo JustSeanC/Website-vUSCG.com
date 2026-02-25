@@ -7,7 +7,7 @@
 
   <style>
     :root{
-      --max: 1280px; /* wider */
+      --max: 1280px;
       --radius: 16px;
       --border: rgba(255,255,255,.14);
       --muted: rgba(255,255,255,.72);
@@ -15,7 +15,7 @@
 
     body{
       margin:0;
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      font-family: system-ui,-apple-system, Segoe UI, Roboto, Arial, sans-serif;
       line-height:1.4;
       color:#fff;
       background:
@@ -115,7 +115,6 @@
     }
     .muted{ color: var(--muted); font-weight: 700; }
 
-    /* Chart header row */
     .chartHead{
       display:flex;
       align-items:center;
@@ -128,6 +127,9 @@
       border-radius: 12px;
       font-weight: 900;
     }
+
+    /* Make charts full width */
+    canvas{ width:100%; display:block; }
 
     /* Airframe bars */
     .barRow{
@@ -154,8 +156,21 @@
     }
     .barValue{ text-align:right; font-variant-numeric: tabular-nums; color: var(--muted); }
 
-    /* Landing rate list rows */
-    .lrRow{
+    /* Card header with month select */
+    .cardHead{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+    }
+    .monthSelect{
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-weight: 900;
+    }
+
+    /* Landing + leaderboard rows */
+    .lrRow, .lbRow{
       display:grid;
       grid-template-columns: 92px 1fr 120px;
       gap:10px;
@@ -163,26 +178,27 @@
       padding:8px 0;
       border-bottom: 1px solid rgba(255,255,255,.10);
     }
-    .lrRow:last-child{ border-bottom:none; }
-    .lrPilot{ font-weight: 900; }
-    .lrName{ color: rgba(255,255,255,.75); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .lrRow:last-child, .lbRow:last-child{ border-bottom:none; }
+    .lrPilot, .lbPilot{ font-weight: 900; }
+    .lrName, .lbName{ color: rgba(255,255,255,.75); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .lrRate{ text-align:right; font-variant-numeric: tabular-nums; font-weight: 900; }
     .lrRate.good{ color: rgba(120,255,214,.90); }
     .lrRate.bad{ color: rgba(255,140,140,.90); }
+    .lbVal{ text-align:right; font-variant-numeric: tabular-nums; font-weight: 900; color: rgba(255,255,255,.82); }
+
+    /* Clickable live card */
+    .cardLink{ display:block; color:inherit; text-decoration:none; }
+    .cardLink:focus{ outline: 2px solid rgba(120,255,214,.45); outline-offset: 3px; }
+    .isHidden{ display:none !important; }
 
     @media (max-width: 900px){
       .span-3, .span-6{ grid-column: span 12; }
       .barRow{ grid-template-columns: 1fr; }
       .barValue{ text-align:left; }
-      .lrRow{ grid-template-columns: 1fr; }
-      .lrRate{ text-align:left; }
+      .lrRow, .lbRow{ grid-template-columns: 1fr; }
+      .lrRate, .lbVal{ text-align:left; }
     }
-    /* Make charts use full card width */
-canvas{
-  width: 100%;
-  display: block;
-}
-/* Top mini-nav for standalone pages */
+    /* Top mini-nav */
 .topNav{
   display:flex;
   align-items:center;
@@ -190,7 +206,6 @@ canvas{
   gap:12px;
   margin-bottom: 12px;
 }
-
 .breadcrumb{
   display:flex;
   align-items:center;
@@ -199,18 +214,15 @@ canvas{
   color: rgba(255,255,255,.82);
   text-decoration:none;
 }
-
 .breadcrumb span{
   color: rgba(255,255,255,.55);
   font-weight: 800;
 }
-
 .navActions{
   display:flex;
   gap:10px;
   flex-wrap:wrap;
 }
-
 .btnLink{
   display:inline-flex;
   align-items:center;
@@ -223,28 +235,28 @@ canvas{
   background: rgba(255,255,255,.06);
   color:#fff;
 }
-.btnLink:hover{
-  background: rgba(255,255,255,.10);
-}
-
-.btnPrimary{
-  border-color: rgba(120,255,214,.35);
-}
+.btnLink:hover{ background: rgba(255,255,255,.10); }
+.btnPrimary{ border-color: rgba(120,255,214,.35); }
   </style>
 </head>
 
 <body>
 <main>
   <section class="hero">
-      <div class="topNav">
-  <a class="breadcrumb" href="/index.html">
-    ← Home
-  </a>
 
-  <div class="navActions">
-    <a class="btnLink btnPrimary" href="https://crew.vuscg.com/register">Join Now</a>
+  <!-- Mini nav -->
+  <div class="topNav">
+    <a class="breadcrumb" href="/index.html">← Home</a>
+
+    <div class="navActions">
+      <a class="btnLink btnPrimary" href="https://crew.vuscg.com/register" target="_blank" rel="noopener">
+        Join Now
+      </a>
+    </div>
   </div>
-</div>
+
+  <!-- Your existing header row -->
+ 
     <div class="topRow">
       <span class="kicker" id="kicker">Year at a Glance</span>
 
@@ -257,71 +269,105 @@ canvas{
     <h1 id="title">vUSCG Stats</h1>
     <p class="lead" id="lead">Loading…</p>
 
-    <div class="grid">
-      <div class="card span-3">
-        <div class="label">Pilots</div>
-        <div class="value" id="pilots">—</div>
-        <div class="sub">Unique pilots with completed flights</div>
-      </div>
+<div class="grid">
+  <div class="card span-3">
+    <div class="label">Pilots</div>
+    <div class="value" id="pilots">—</div>
+    <div class="sub">Unique pilots with completed flights</div>
+  </div>
 
-      <div class="card span-3">
-        <div class="label">Flights</div>
-        <div class="value" id="flights">—</div>
-        <div class="sub">Completed flights in the selected year</div>
-      </div>
+  <div class="card span-3">
+    <div class="label">Flights</div>
+    <div class="value" id="flights">—</div>
+    <div class="sub">Completed flights in the selected year</div>
+  </div>
 
-      <div class="card span-3">
-        <div class="label">Hours</div>
-        <div class="value" id="hours">—</div>
-        <div class="sub" id="hoursDisplay">—</div>
-      </div>
+  <div class="card span-3">
+    <div class="label">Hours</div>
+    <div class="value" id="hours">—</div>
+    <div class="sub" id="hoursDisplay">—</div>
+  </div>
 
-      <div class="card span-3">
-        <div class="label">Miles</div>
-        <div class="value" id="miles">—</div>
-        <div class="sub">Total distance</div>
-      </div>
+  <div class="card span-3">
+    <div class="label">Miles</div>
+    <div class="value" id="miles">—</div>
+    <div class="sub">Total distance</div>
+  </div>
 
-      <div class="card span-12">
-        <div class="label">Currently Flying (Live)</div>
-        <div class="value" id="currentlyFlying">—</div>
-        <div class="sub">Active smartCARS/ACARS sessions in the last 5 minutes</div>
-      </div>
+  <a id="liveCard"
+     class="card span-12 cardLink"
+     href="https://crew.vuscg.com/livemap"
+     target="_blank"
+     rel="noopener">
+    <div class="label">Currently Flying (Live) →</div>
+    <div class="value" id="currentlyFlying">—</div>
+    <div class="sub">Click to open the live map</div>
+  </a>
 
-      <div class="card span-12">
-        <div class="chartHead">
-          <div class="label" id="chartTitle">Flights Per Month</div>
-          <select id="metricSelect" class="chartSelect" aria-label="Select chart metric">
-            <option value="flights">Flights</option>
-            <option value="hours">Hours</option>
-            <option value="miles">Miles</option>
-          </select>
-        </div>
-        <div class="sub" id="chartSub" style="margin-top:8px;">—</div>
-        <div style="margin-top:10px;">
-          <canvas id="trendChart" height="220"></canvas>
-        </div>
-      </div>
-
-      <div class="card span-6">
-        <div class="label">Best Landings</div>
-        <div class="sub">Closest to 0</div>
-        <div id="bestLandings" style="margin-top:10px;">Loading…</div>
-      </div>
-
-      <div class="card span-6">
-        <div class="label">Worst Landings</div>
-        <div class="sub">I wonder how they managed to pass training...</div>
-        <div id="worstLandings" style="margin-top:10px;">Loading…</div>
-      </div>
-
-      <div class="card span-12">
-        <div class="label">Top Airframes by Hours</div>
-        <div id="airframes" class="sub" style="margin-top:10px;">Loading…</div>
-      </div>
+  <div class="card span-12">
+    <div class="chartHead">
+      <div class="label" id="chartTitle">Flights Per Month</div>
+      <select id="metricSelect" class="chartSelect" aria-label="Select chart metric">
+        <option value="flights">Flights</option>
+        <option value="hours">Hours</option>
+        <option value="miles">Miles</option>
+      </select>
     </div>
-    <div style="margin-top:14px;">
-  <a class="btnLink" href="/index.html">← Return to Home</a>
+    <div class="sub" id="chartSub" style="margin-top:8px;">—</div>
+    <div style="margin-top:10px;">
+      <canvas id="trendChart" height="220"></canvas>
+    </div>
+  </div>
+
+  <!-- moved here -->
+  <div class="card span-12">
+    <div class="label">Top Airframes by Hours</div>
+    <div id="airframes" class="sub" style="margin-top:10px;">Loading…</div>
+  </div>
+
+  <div class="card span-6">
+    <div class="cardHead">
+      <div>
+        <div class="label">Top Flights</div>
+        <div class="sub">#NoLife Most flights logged • <span id="monthLabelC">—</span></div>
+      </div>
+      <select class="monthSelect" aria-label="Select month (top flights)"></select>
+    </div>
+    <div id="topFlights" style="margin-top:10px;">Loading…</div>
+  </div>
+
+  <div class="card span-6">
+    <div class="cardHead">
+      <div>
+        <div class="label">Top Hours</div>
+        <div class="sub">#NoLife Most hours logged • <span id="monthLabelD">—</span></div>
+      </div>
+      <select class="monthSelect" aria-label="Select month (top hours)"></select>
+    </div>
+    <div id="topHours" style="margin-top:10px;">Loading…</div>
+  </div>
+
+  <div class="card span-6">
+    <div class="cardHead">
+      <div>
+        <div class="label" id="bestTitle">Best Landings</div>
+        <div class="sub">Closest to 0 gets a cookie! •<span id="monthLabelA">—</span></div>
+      </div>
+      <select class="monthSelect" aria-label="Select month (best landings)"></select>
+    </div>
+    <div id="bestLandings" style="margin-top:10px;">Loading…</div>
+  </div>
+
+  <div class="card span-6">
+    <div class="cardHead">
+      <div>
+        <div class="label" id="worstTitle">Worst Landings</div>
+        <div class="sub">How did these guys even pass their training! • ?<span id="monthLabelB">—</span></div>
+      </div>
+      <select class="monthSelect" aria-label="Select month (worst landings)"></select>
+    </div>
+    <div id="worstLandings" style="margin-top:10px;">Loading…</div>
+  </div>
 </div>
   </section>
 </main>
@@ -332,22 +378,30 @@ canvas{
 
   const yearSelect = $('yearSelect');
   const metricSelect = $('metricSelect');
-  const nowYear = new Date().getFullYear();
+  const monthSelectEls = Array.from(document.querySelectorAll('.monthSelect'));
 
-  // Populate dropdown: current year down to 2024
+  const liveCard = document.getElementById('liveCard');
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
+
+  const nf = new Intl.NumberFormat('en-US');
+  const nf1 = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 });
+
+  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  let currentData = null;
+  let selectedMonth = null;
+  let isSettingMonth = false;
+
+  // Populate year dropdown: current year down to 2024
   const minYear = 2024;
-  for (let y = nowYear; y >= minYear; y--) {
+  for (let y = currentYear; y >= minYear; y--) {
     const opt = document.createElement('option');
     opt.value = String(y);
     opt.textContent = String(y);
     yearSelect.appendChild(opt);
   }
-  yearSelect.value = String(nowYear);
-
-  const nf = new Intl.NumberFormat('en-US');
-  const nf1 = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 });
-
-  let currentData = null;
+  yearSelect.value = String(currentYear);
 
   function setText(id, text){ $(id).textContent = text; }
 
@@ -360,23 +414,6 @@ canvas{
     const last = parts[parts.length - 1];
     const initial = last ? last[0].toUpperCase() : '';
     return initial ? `${first} ${initial}.` : first;
-  }
-
-  // Limit how many times one pilot can appear (default: 1 per list)
-  function limitByPilot(list, limitTotal = 5, maxPerPilot = 1) {
-    if (!Array.isArray(list)) return [];
-    const counts = new Map();
-    const out = [];
-    for (const row of list) {
-      const pid = row?.pilot_id ?? row?.user_id ?? row?.pilot ?? null;
-      const key = pid == null ? JSON.stringify(row) : String(pid);
-      const c = counts.get(key) || 0;
-      if (c >= maxPerPilot) continue;
-      counts.set(key, c + 1);
-      out.push(row);
-      if (out.length >= limitTotal) break;
-    }
-    return out;
   }
 
   function niceStep(rawMax) {
@@ -395,7 +432,7 @@ canvas{
     if (!canvas) return;
 
     const dpr = window.devicePixelRatio || 1;
-    const cssWidth = canvas.clientWidth || canvas.parentElement.clientWidth;
+    const cssWidth = canvas.parentElement.getBoundingClientRect().width;
     const cssHeight = canvas.height;
 
     canvas.width = Math.floor(cssWidth * dpr);
@@ -407,7 +444,6 @@ canvas{
     const w = cssWidth;
     const h = cssHeight;
 
-    // padding (more room for Y labels)
     const padL = 52, padR = 14, padT = 10, padB = 32;
 
     const rawMax = Math.max(1, ...values);
@@ -420,9 +456,7 @@ canvas{
     const xStep = (x1 - x0) / Math.max(1, (values.length - 1));
     const yScale = (y0 - y1) / (maxVal - 0);
 
-    const fmtY = typeof opts.yFormatter === 'function'
-      ? opts.yFormatter
-      : (v) => String(v);
+    const fmtY = typeof opts.yFormatter === 'function' ? opts.yFormatter : (v) => String(v);
 
     ctx.clearRect(0, 0, w, h);
 
@@ -435,7 +469,7 @@ canvas{
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
 
-    const ticks = 4; // 0, 25, 50, 75, 100%
+    const ticks = 4;
     for (let i = 0; i <= ticks; i++) {
       const t = i / ticks;
       const y = y0 - (y0 - y1) * t;
@@ -478,7 +512,7 @@ canvas{
       ctx.fill();
     });
 
-    // x labels — show all months when chart is wide enough
+    // x labels (show all if wide)
     ctx.fillStyle = 'rgba(255,255,255,.65)';
     ctx.font = '12px system-ui, -apple-system, Segoe UI, Roboto, Arial';
     ctx.textAlign = 'center';
@@ -545,10 +579,7 @@ canvas{
       return;
     }
 
-    // enforce per-pilot display limit (1 each) and top 5 max
-    const limited = limitByPilot(list, 5, 1);
-
-    limited.forEach(row => {
+    list.forEach(row => {
       const pilotNum = row.pilot_id ?? row.user_id ?? '—';
       const pilotTag = `C${pilotNum}`;
       const name = formatFirstLastInitial(row.pilot_name);
@@ -577,18 +608,56 @@ canvas{
     });
   }
 
+  function renderPilotList(elId, list, kind){
+    const el = $(elId);
+    if (!el) return;
+
+    el.innerHTML = '';
+
+    if (!Array.isArray(list) || list.length === 0) {
+      el.textContent = 'No data yet.';
+      return;
+    }
+
+    list.forEach(row => {
+      const pilotNum = row.pilot_id ?? row.user_id ?? '—';
+      const pilotTag = `C${pilotNum}`;
+      const name = formatFirstLastInitial(row.pilot_name);
+
+      const flights = Number(row.flights || 0);
+      const hours = Number(row.hours || 0);
+
+      const r = document.createElement('div');
+      r.className = 'lbRow';
+
+      const p = document.createElement('div');
+      p.className = 'lbPilot';
+      p.textContent = pilotTag;
+
+      const n = document.createElement('div');
+      n.className = 'lbName';
+      n.textContent = name;
+
+      const v = document.createElement('div');
+      v.className = 'lbVal';
+      v.textContent = (kind === 'hours')
+        ? `${hours.toLocaleString(undefined, {maximumFractionDigits: 1})}h`
+        : `${flights.toLocaleString()}`;
+
+      r.appendChild(p);
+      r.appendChild(n);
+      r.appendChild(v);
+
+      el.appendChild(r);
+    });
+  }
+
   function metricMeta(metric){
     if (metric === 'hours') {
       return {
         title: 'Hours Per Month',
         yFormatter: (v) => v.toLocaleString(),
-        value: (m) => {
-          const h = Number(m?.hours);
-          if (isFinite(h)) return h;
-          const mins = Number(m?.minutes ?? m?.total_minutes);
-          if (isFinite(mins)) return Math.round((mins / 60) * 10) / 10;
-          return 0;
-        },
+        value: (m) => Number(m?.hours || 0),
         sub: (vals) => {
           const total = vals.reduce((a,b)=>a+b,0);
           const peak = vals.length ? Math.max(...vals) : 0;
@@ -596,18 +665,11 @@ canvas{
         }
       };
     }
-
     if (metric === 'miles') {
       return {
         title: 'Miles Per Month',
         yFormatter: (v) => v.toLocaleString(),
-        value: (m) => {
-          const mi = Number(m?.miles);
-          if (isFinite(mi)) return mi;
-          const dist = Number(m?.distance);
-          if (isFinite(dist)) return dist;
-          return 0;
-        },
+        value: (m) => Number(m?.miles || 0),
         sub: (vals) => {
           const total = vals.reduce((a,b)=>a+b,0);
           const peak = vals.length ? Math.max(...vals) : 0;
@@ -615,15 +677,10 @@ canvas{
         }
       };
     }
-
-    // default flights
     return {
       title: 'Flights Per Month',
       yFormatter: (v) => v.toLocaleString(),
-      value: (m) => {
-        const f = Number(m?.flights);
-        return isFinite(f) ? f : 0;
-      },
+      value: (m) => Number(m?.flights || 0),
       sub: (vals) => {
         const total = vals.reduce((a,b)=>a+b,0);
         const peak = vals.length ? Math.max(...vals) : 0;
@@ -637,17 +694,15 @@ canvas{
 
     const monthly = Array.isArray(currentData.monthly) ? currentData.monthly : [];
     const metric = metricSelect.value;
-
     const meta = metricMeta(metric);
 
-    let labels = monthly.map(m => m.label ?? m.month ?? '');
+    let labels = monthly.map(m => m.label ?? '');
     let values = monthly.map(m => meta.value(m));
 
-    // “expanding” behavior: only show through the last month that has any value
+    // expand through last month with any value
     let last = 0;
-    for (let i = 0; i < values.length; i++) {
-      if (values[i] > 0) last = i;
-    }
+    for (let i = 0; i < values.length; i++) if (values[i] > 0) last = i;
+
     labels = labels.slice(0, Math.max(1, last + 1));
     values = values.slice(0, Math.max(1, last + 1));
 
@@ -657,15 +712,72 @@ canvas{
     drawLineChart('trendChart', labels, values, { yFormatter: meta.yFormatter });
   }
 
-  async function loadYear(year){
+  function buildMonthSelectOptions(yearNumber, monthToSelect){
+  isSettingMonth = true;
+
+  // disable future months only when viewing the current year
+  const disableFuture = (yearNumber === currentYear);
+
+  monthSelectEls.forEach(sel => {
+    sel.innerHTML = '';
+
+    // NEW: "Year" option
+    const optYear = document.createElement('option');
+    optYear.value = '0';
+    optYear.textContent = 'Year';
+    sel.appendChild(optYear);
+
+    // Months 1..12
+    for (let m = 1; m <= 12; m++) {
+      const opt = document.createElement('option');
+      opt.value = String(m);
+      opt.textContent = monthNames[m - 1];
+
+      if (disableFuture && m > currentMonth) {
+        opt.disabled = true;
+      }
+
+      sel.appendChild(opt);
+    }
+
+    // monthToSelect can be 0 (Year) or 1..12
+    sel.value = String(monthToSelect ?? 0);
+  });
+
+  selectedMonth = Number(monthToSelect ?? 0);
+  isSettingMonth = false;
+}
+
+  function setMonthLabels(label){
+    $('monthLabelA').textContent = label;
+    $('monthLabelB').textContent = label;
+    $('monthLabelC').textContent = label;
+    $('monthLabelD').textContent = label;
+  }
+
+  async function loadYear(year, month = null){
     setText('lead', 'Loading…');
     ['pilots','flights','hours','miles','currentlyFlying'].forEach(id => setText(id,'—'));
     $('airframes').textContent = 'Loading…';
     $('bestLandings').textContent = 'Loading…';
     $('worstLandings').textContent = 'Loading…';
-    $('chartSub').textContent = '—';
+    $('topFlights').textContent = 'Loading…';
+    $('topHours').textContent = 'Loading…';
 
-    const res = await fetch(`https://crew.vuscg.com/api/stats-year.php?year=${encodeURIComponent(year)}`, { cache: 'no-store' });
+    // Hide live card until we confirm current-year selection
+    if (liveCard) liveCard.classList.add('isHidden');
+
+    let url = `https://crew.vuscg.com/api/stats-year.php?year=${encodeURIComponent(year)}`;
+
+// NEW: allow month=0 (Year) OR 1..12
+if (month !== null && month !== undefined) {
+  const m = Number(month);
+  if (m === 0 || (m >= 1 && m <= 12)) {
+    url += `&month=${encodeURIComponent(m)}`;
+  }
+}
+
+    const res = await fetch(url, { cache: 'no-store' });
     const data = await res.json();
 
     if (!data || !data.ok) {
@@ -673,11 +785,30 @@ canvas{
       $('airframes').textContent = '—';
       $('bestLandings').textContent = '—';
       $('worstLandings').textContent = '—';
+      $('topFlights').textContent = '—';
+      $('topHours').textContent = '—';
       return;
     }
 
     currentData = data;
+// --- UI FIX: keep "Year" selected when requested (month=0) ---
+const requestedMonth = (month !== null && month !== undefined) ? Number(month) : null;
 
+const effectiveMonth =
+  (requestedMonth === 0 || (requestedMonth >= 1 && requestedMonth <= 12))
+    ? requestedMonth
+    : (data.month !== undefined && data.month !== null ? Number(data.month) : 1);
+
+// Update month dropdowns using the month we actually want selected
+buildMonthSelectOptions(Number(data.year), effectiveMonth);
+
+// Force the visible selection + labels
+if (effectiveMonth === 0) {
+  monthSelectEls.forEach(sel => { sel.value = '0'; });
+  setMonthLabels('Year');
+} else {
+  setMonthLabels(data.month_label || monthNames[effectiveMonth - 1] || '—');
+}
     setText('kicker', `${data.year} At a Glance`);
     setText('title', `vUSCG ${data.year} Stats`);
     setText('updatedAt', new Date(data.updated_at).toLocaleString());
@@ -687,26 +818,47 @@ canvas{
     setText('hours', nf1.format(data.hours ?? 0));
     setText('miles', nf1.format(data.miles ?? 0));
     setText('hoursDisplay', data.hours_display ? `(${data.hours_display})` : '—');
+
+    // Live card only for current year
+    if (liveCard) {
+      const selectedYear = Number(year);
+      liveCard.classList.toggle('isHidden', selectedYear !== currentYear);
+    }
     setText('currentlyFlying', nf.format(data.currently_flying ?? 0));
 
     setText('lead', `Year-to-date totals based on completed PIREPs in ${data.year}.`);
 
-    // Airframes
+
+    // Month drilldowns
+    renderLandingList('bestLandings', data.month_best_landings, 'best');
+    renderLandingList('worstLandings', data.month_worst_landings, 'worst');
+    renderPilotList('topFlights', data.month_top_flights, 'flights');
+    renderPilotList('topHours', data.month_top_hours, 'hours');
+
+    // Airframes + chart
     renderAirframes(data.top_airframes);
-
-    // Landing lists
-    renderLandingList('bestLandings', data.best_landings, 'best');
-    renderLandingList('worstLandings', data.worst_landings, 'worst');
-
-    // Chart
     updateChart();
   }
 
-  // Events
-  yearSelect.addEventListener('change', () => loadYear(yearSelect.value));
+  // Month dropdown sync: any month select changes all, then refetch
+  monthSelectEls.forEach(sel => {
+    sel.addEventListener('change', () => {
+      if (isSettingMonth) return;
+      const m = Number(sel.value);
+      monthSelectEls.forEach(s => { s.value = String(m); });
+      selectedMonth = m;
+      loadYear(yearSelect.value, selectedMonth);
+    });
+  });
+
+  yearSelect.addEventListener('change', () => {
+  selectedMonth = 0;
+  loadYear(yearSelect.value, 0);
+});
+
   metricSelect.addEventListener('change', () => updateChart());
 
-  // Redraw chart on resize (debounced)
+  // redraw chart on resize
   let resizeTimer = null;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
@@ -714,7 +866,7 @@ canvas{
   });
 
   // Initial load
-  loadYear(yearSelect.value);
+  loadYear(yearSelect.value, 0);
 })();
 </script>
 </body>
