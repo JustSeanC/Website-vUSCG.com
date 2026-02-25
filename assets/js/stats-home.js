@@ -19,28 +19,63 @@
     if (el) el.textContent = text;
   }
 
-  function loadStats() {
-    fetch('api/stats-home.php', { cache: 'no-store' })
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        if (!data || !data.stats) return;
+  function applyStats(payload) {
+    var stats = payload && payload.stats ? payload.stats : payload;
+    if (!stats || typeof stats !== 'object') return false;
 
-        var stats = data.stats;
-        Object.keys(stats).forEach(function (key) {
-          var node = document.querySelector('[data-stat="' + key + '"]');
-          if (node) node.textContent = formatValue(key, stats[key]);
-        });
+    Object.keys(stats).forEach(function (key) {
+      var node = document.querySelector('[data-stat="' + key + '"]');
+      if (node) node.textContent = formatValue(key, stats[key]);
+    });
 
-        if (data.updated_at) {
-          var updated = new Date(data.updated_at);
-          if (!isNaN(updated.getTime())) {
-            setText('homeStatsUpdatedAt', 'Updated ' + updated.toLocaleString());
-          }
+    if (payload && payload.updated_at) {
+      var updated = new Date(payload.updated_at);
+      if (!isNaN(updated.getTime())) {
+        setText('homeStatsUpdatedAt', 'Updated ' + updated.toLocaleString());
+        return true;
+      }
+    }
+
+    setText('homeStatsUpdatedAt', 'Updated just now');
+    return true;
+  }
+
+  function fetchJson(url) {
+    return fetch(url, { cache: 'no-store' }).then(function (response) {
+      if (!response.ok) {
+        throw new Error('HTTP ' + response.status + ' at ' + url);
+      }
+      return response.text().then(function (text) {
+        try {
+          return JSON.parse(text);
+        } catch (e) {
+          throw new Error('Invalid JSON from ' + url);
         }
-      })
-      .catch(function () {
-        setText('homeStatsUpdatedAt', 'Live stats temporarily unavailable');
       });
+    });
+  }
+
+  function loadStats() {
+    var endpoints = ['api/stats-home.php', 'api/home-stats.php'];
+
+    function tryNext(index) {
+      if (index >= endpoints.length) {
+        setText('homeStatsUpdatedAt', 'Live stats temporarily unavailable');
+        return;
+      }
+
+      fetchJson(endpoints[index])
+        .then(function (data) {
+          if (!applyStats(data)) {
+            throw new Error('Missing stats payload');
+          }
+        })
+        .catch(function () {
+          tryNext(index + 1);
+        });
+    }
+
+    tryNext(0);
   }
 
   if (document.readyState === 'loading') {
