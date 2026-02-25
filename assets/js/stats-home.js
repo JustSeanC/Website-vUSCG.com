@@ -20,7 +20,7 @@
   }
 
   function loadStats() {
-    fetch('api/home-stats.php', { cache: 'no-store' })
+    fetch('api/stats-home.php', { cache: 'no-store' })
       .then(function (r) { return r.json(); })
       .then(function (data) {
         if (!data || !data.stats) return;
