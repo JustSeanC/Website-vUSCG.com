@@ -123,6 +123,8 @@ function load_google_sheet_stats($url)
         'HITRON' => 'hitron_rated',
         'BLACKJACK' => 'black_jack_rated',
         'MQ9' => 'mq9_rated',
+        'UAS' => 'mq9_rated',
+        'MQ9UAS' => 'mq9_rated',
     ];
 
     $out = [];
@@ -281,6 +283,12 @@ $payload = [
     'ok' => true,
     'updated_at' => gmdate('c'),
     'stats' => $stats,
+    'meta' => [
+        'sources' => [
+            'google_sheet' => !empty($sheetStats),
+            'phpvms' => !empty($phpvmsStats),
+        ],
+    ],
 ];
 
 write_cache($config['cache'], $payload);

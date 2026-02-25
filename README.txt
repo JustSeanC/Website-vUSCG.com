@@ -58,15 +58,29 @@ Top navigation is centralized in `_includes/nav.php` and included from each page
 
 ## Home Live Stats
 
-Homepage live stats are loaded from `api/home-stats.php` and displayed in `index.html`.
+Homepage live stats are loaded from `api/stats-home.php` and displayed in `index.html`.
+A backwards-compatible alias also exists at `api/home-stats.php` for older links/cached clients.
 
-1. Copy `api/home-stats.config.example.php` to `api/home-stats.config.php`.
+1. Copy `api/stats-home.config.example.php` to `api/stats-home.config.php`.
 2. Set `google_sheet_csv_url` to your **published CSV URL**:
    - Format: `https://docs.google.com/spreadsheets/d/<SHEET_ID>/export?format=csv&gid=<GID>`
 3. Configure phpVMS source in `phpvms.mode`:
    - `http` (recommended): point `http_url` to your crew endpoint, e.g. `https://crew.vuscg.com/api/stats-home.php`
    - `mysql`: set credentials and SQL directly (only if this host can reach that DB)
 4. Optional cache settings are in `cache`.
+
+
+### Troubleshooting: "Live stats temporarily unavailable"
+
+Run these URLs directly in a browser and confirm they return JSON (not an HTML error page):
+- `https://vuscg.com/api/stats-home.php`
+- `https://vuscg.com/api/home-stats.php`
+
+If homepage still shows unavailable:
+- open browser DevTools Console and look for `[home-stats] All endpoints failed:` details (canonical endpoint is `api/stats-home.php`)
+- check that `api/stats-home.config.php` exists on the server and has valid values
+- verify your host serves PHP inside `/api/` and isn’t rewriting those URLs to HTML
+- if using phpVMS `http` mode, test `http_url` directly from the public server environment
 
 ### phpVMS Option A (recommended): crew endpoint
 
@@ -77,7 +91,7 @@ Use an endpoint on crew host and let this public site call it.
 - Update DB credentials in that file.
 - Test endpoint directly in browser:
   - `https://crew.vuscg.com/api/stats-home.php`
-- Then set `phpvms.mode = 'http'` and `http_url` in `api/home-stats.config.php` on this public site.
+- Then set `phpvms.mode = 'http'` and `http_url` in `api/stats-home.config.php` on this public site.
 
 ### Finding DB username/password
 
