@@ -46,11 +46,9 @@ It does **not** include the crew portal / phpVMS site (hosted separately).
 ├── .htaccess          # optional / host-specific
 └── .gitignore
 
-## Shared Navigation (PHP include)
 
-Top navigation is centralized in `_includes/nav.php` and included from each page header using PHP.
+## Shared Navigation
 
-- Edit `_includes/nav.php` to add/remove/reorder menu items.
-- `.html` pages are configured to run through PHP via `.htaccess` so includes work without renaming pages.
-- Keep `<nav id="nav">` in each page and include the shared nav partial inside it.
+Navigation links are now centralized in `assets/js/site-nav.js`.
+
 
