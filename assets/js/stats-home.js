@@ -57,16 +57,27 @@
   }
 
   function loadStats() {
-    // Try absolute paths first (works if homepage is served from a nested route), then relative fallback.
-    var endpoints = ['/api/stats-home.php', '/api/stats-home.php', 'api/stats-home.php', 'api/stats-home.php'];
+    // Canonical endpoint(s) first; legacy alias is a last-resort fallback.
+    var endpoints = ['api/stats-home.php', '/api/stats-home.php', 'api/home-stats.php', '/api/home-stats.php'];
     var errors = [];
+
+    function summarizePrimaryFailure() {
+      for (var i = 0; i < errors.length; i++) {
+        if (errors[i].url.indexOf('stats-home.php') !== -1) {
+          return errors[i].message;
+        }
+      }
+      return errors.length ? errors[errors.length - 1].message : 'Unknown fetch error';
+    }
 
     function tryNext(index) {
       if (index >= endpoints.length) {
-        var detail = errors.length ? ': ' + errors[errors.length - 1] : '';
-        setText('homeStatsUpdatedAt', 'Live stats temporarily unavailable' + detail);
+        var detail = summarizePrimaryFailure();
+        setText('homeStatsUpdatedAt', 'Live stats temporarily unavailable: ' + detail);
+
         if (typeof console !== 'undefined' && console.error) {
-          console.error('[stats-home] All endpoints failed:', errors);
+          console.error('[home-stats] All endpoints failed:', errors);
+          console.error('[home-stats] Canonical endpoint is api/stats-home.php.');
         }
         return;
       }
@@ -78,7 +89,10 @@
           }
         })
         .catch(function (err) {
-          errors.push((err && err.message) ? err.message : 'Unknown error at ' + endpoints[index]);
+          errors.push({
+            url: endpoints[index],
+            message: (err && err.message) ? err.message : 'Unknown error at ' + endpoints[index],
+          });
           tryNext(index + 1);
         });
     }
