@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>vUSCG • Year at a Glance</title>
+
+  <style>
+    :root{
+      --max: 1100px;
+      --radius: 16px;
+      --border: rgba(255,255,255,.14);
+      --muted: rgba(255,255,255,.72);
+    }
+    body{
+      margin:0;
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      line-height:1.4;
+      background:#0b1220;
+      color:#fff;
+    }
+    main{ max-width:var(--max); margin:0 auto; padding:30px 16px 70px; }
+
+    .hero{
+      border-radius: calc(var(--radius) + 8px);
+      border:1px solid var(--border);
+      background:
+        radial-gradient(1200px 380px at 10% 10%, rgba(88,154,255,.25), transparent 60%),
+        radial-gradient(900px 320px at 90% 0%, rgba(120,255,214,.12), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: 0 18px 70px rgba(0,0,0,.35);
+      padding: 22px;
+    }
+
+    .topRow{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; }
+    .kicker{
+      display:inline-block;
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--muted);
+      border:1px solid var(--border);
+      border-radius:999px;
+      padding:7px 10px;
+      background: rgba(255,255,255,.03);
+    }
+
+    h1{ margin: 12px 0 6px; font-size: clamp(28px, 4vw, 44px); line-height:1.05; }
+    .lead{ margin:0; color:var(--muted); max-width: 80ch; }
+
+    .controls{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    }
+    select{
+      background: rgba(255,255,255,.06);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.18);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-weight: 800;
+      outline:none;
+    }
+
+    .grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap:14px; margin-top:16px; }
+
+    .card{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.04);
+      box-shadow: 0 10px 28px rgba(0,0,0,.25);
+      padding: 14px;
+    }
+    .span-3{ grid-column: span 3; }
+    .span-6{ grid-column: span 6; }
+    .span-12{ grid-column: span 12; }
+
+    .label{
+      font-size:12px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+    .value{
+      margin-top:8px;
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+    .sub{ margin-top:6px; font-size:13px; color:var(--muted); }
+
+    .barRow{
+      display:grid;
+      grid-template-columns: 90px 1fr 70px;
+      gap:10px;
+      align-items:center;
+      margin-top:10px;
+    }
+    .barLabel{ font-weight: 900; font-size: 14px; }
+    .barWrap{
+      position:relative;
+      height: 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.08);
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .barFill{
+      position:absolute; inset:0 auto 0 0;
+      width: 0%;
+      border-radius:999px;
+      background: linear-gradient(90deg, rgba(88,154,255,.9), rgba(120,255,214,.8));
+    }
+    .barValue{ text-align:right; font-variant-numeric: tabular-nums; color: var(--muted); }
+
+    .pill{
+      display:inline-flex; gap:8px; align-items:center;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-weight: 900;
+      color:#fff;
+    }
+
+    .muted{ color: var(--muted); font-weight: 700; }
+
+    @media (max-width: 900px){
+      .span-3, .span-6{ grid-column: span 12; }
+      .barRow{ grid-template-columns: 1fr; }
+      .barValue{ text-align:left; }
+    }
+  </style>
+</head>
+
+<body>
+<main>
+  <section class="hero">
+    <div class="topRow">
+      <span class="kicker" id="kicker">Year at a Glance</span>
+
+      <div class="controls">
+        <span class="pill">Live <span class="muted" id="updatedAt">—</span></span>
+        <select id="yearSelect" aria-label="Select year"></select>
+      </div>
+    </div>
+
+    <h1 id="title">vUSCG Stats</h1>
+    <p class="lead" id="lead">Loading…</p>
+
+    <div class="grid">
+      <div class="card span-3">
+        <div class="label">Pilots</div>
+        <div class="value" id="pilots">—</div>
+        <div class="sub">Unique pilots with completed flights</div>
+      </div>
+
+      <div class="card span-3">
+        <div class="label">Flights</div>
+        <div class="value" id="flights">—</div>
+        <div class="sub">Completed flights in the selected year</div>
+      </div>
+
+      <div class="card span-3">
+        <div class="label">Hours</div>
+        <div class="value" id="hours">—</div>
+        <div class="sub" id="hoursDisplay">—</div>
+      </div>
+
+      <div class="card span-3">
+        <div class="label">Miles</div>
+        <div class="value" id="miles">—</div>
+        <div class="sub">Total distance</div>
+      </div>
+
+      <div class="card span-12">
+        <div class="label">Currently Flying (Live)</div>
+        <div class="value" id="currentlyFlying">—</div>
+        <div class="sub">Active smartCARS/ACARS sessions in the last 5 minutes</div>
+      </div>
+
+      <div class="card span-12">
+        <div class="label">Top Airframes by Hours</div>
+        <div id="airframes" class="sub" style="margin-top:10px;">Loading…</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+
+  const yearSelect = $('yearSelect');
+  const nowYear = new Date().getFullYear();
+
+  // Populate a simple year dropdown: current year down to 2020 (edit as you like)
+  const minYear = 2020;
+  for (let y = nowYear; y >= minYear; y--) {
+    const opt = document.createElement('option');
+    opt.value = String(y);
+    opt.textContent = String(y);
+    yearSelect.appendChild(opt);
+  }
+  yearSelect.value = String(nowYear);
+
+  const nf = new Intl.NumberFormat('en-US');
+  const nf1 = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 });
+
+  function setText(id, text){ $(id).textContent = text; }
+
+  function renderAirframes(list){
+    const wrap = $('airframes');
+    wrap.innerHTML = '';
+
+    if (!Array.isArray(list) || list.length === 0) {
+      wrap.textContent = 'No airframe breakdown available (or schema differs).';
+      return;
+    }
+
+    const max = Math.max(...list.map(x => Number(x.hours || 0)));
+
+    list.forEach(row => {
+      const airframe = row.airframe ?? '—';
+      const hours = Number(row.hours || 0);
+
+      const r = document.createElement('div');
+      r.className = 'barRow';
+
+      const l = document.createElement('div');
+      l.className = 'barLabel';
+      l.textContent = airframe;
+
+      const bw = document.createElement('div');
+      bw.className = 'barWrap';
+
+      const bf = document.createElement('div');
+      bf.className = 'barFill';
+      bf.style.width = (max > 0 ? (hours / max * 100) : 0) + '%';
+      bw.appendChild(bf);
+
+      const v = document.createElement('div');
+      v.className = 'barValue';
+      v.textContent = nf1.format(hours) + 'h';
+
+      r.appendChild(l);
+      r.appendChild(bw);
+      r.appendChild(v);
+
+      wrap.appendChild(r);
+    });
+  }
+
+  async function loadYear(year){
+    setText('lead', 'Loading…');
+    setText('pilots', '—');
+    setText('flights', '—');
+    setText('hours', '—');
+    setText('miles', '—');
+    setText('currentlyFlying', '—');
+    $('airframes').textContent = 'Loading…';
+
+    const res = await fetch(`/api/stats-year.php?year=${encodeURIComponent(year)}`, { cache: 'no-store' });
+    const data = await res.json();
+
+    if (!data || !data.ok) {
+      setText('lead', 'Could not load stats.');
+      $('airframes').textContent = '—';
+      return;
+    }
+
+    setText('kicker', `${data.year} At a Glance`);
+    setText('title', `vUSCG ${data.year} Stats`);
+    setText('updatedAt', new Date(data.updated_at).toLocaleString());
+
+    setText('pilots', nf.format(data.pilots ?? 0));
+    setText('flights', nf.format(data.flights ?? 0));
+    setText('hours', nf1.format(data.hours ?? 0));
+    setText('miles', nf1.format(data.miles ?? 0));
+    setText('hoursDisplay', data.hours_display ? `(${data.hours_display})` : '—');
+
+    setText('currentlyFlying', nf.format(data.currently_flying ?? 0));
+
+    setText('lead',
+      `Year-to-date totals based on completed PIREPs in ${data.year}. ` +
+      `Live “currently flying” updates from ACARS activity.`
+    );
+
+    renderAirframes(data.top_airframes);
+  }
+
+  yearSelect.addEventListener('change', () => loadYear(yearSelect.value));
+  loadYear(yearSelect.value);
+})();
+</script>
+</body>
+</html>
