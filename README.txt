@@ -45,3 +45,25 @@ It does **not** include the crew portal / phpVMS site (hosted separately).
 ├── images/
 ├── .htaccess          # optional / host-specific
 └── .gitignore
+
+## Shared Navigation (PHP include)
+
+Top navigation is centralized in `_includes/nav.php` and included from each page header using PHP.
+
+- Edit `_includes/nav.php` to add/remove/reorder menu items.
+- Top-level submenu labels link to real pages (`About` -> `about.html`, `Operations` -> `fleet.html`) as a fallback if dropdown JS is unavailable.
+- `.html` pages are configured to run through PHP via `.htaccess` so includes work without renaming pages.
+- Keep `<nav id="nav">` in each page and include the shared nav partial inside it.
+
+
+## Home Live Stats
+
+Homepage live stats are loaded from `api/home-stats.php` and displayed in `index.html`.
+
+- Copy `api/home-stats.config.example.php` to `api/home-stats.config.php`.
+- Set `google_sheet_csv_url` to your published Google Sheet CSV URL.
+- Configure phpVMS source in `phpvms.mode`:
+  - `http`: provide an endpoint that returns `pireps`, `hours`, `miles`.
+  - `mysql`: set credentials and SQL query that returns `pireps`, `hours`, `miles` columns.
+- Optional cache settings are in the `cache` section.
+

@@ -12,36 +12,7 @@
 <h1 id="logo"><a href="index.html"><span>Virtual </span>U.S. Coast Guard</a></h1>
 
 <nav id="nav">
-<ul>
-	<li class="submenu"><a href="#">About</a>
-
-	<ul>
-		<li><a href="about.html">About Us</a></li>
-		<li><a href="staff.html">Staff</a></li>
-		<li><a href="partners.html">Partners</a></li>
-		<li class="submenu"><a href="#">Policy</a>
-		<ul>
-			<li><a href="sop.html">General SOP</a></li>
-
-			<li><a href="https://docs.google.com/document/d/1dULzrl4F9T-Hg8KkAth8GAA5x-krxLjPcFlS4YDioRM/edit?usp=sharing">Privacy Policy</a></li>
-			<li><a href="training.html">Training</a></li>
-		</ul>
-		</li>
-	</ul>
-	</li>
-	<li class="submenu"><a href="#">Operations</a>
-	<ul>
-		<li><a href="fleet.html">Fleet</a></li>
-		<li><a href="districts.html">Districts</a></li>
-		<li><a href="2025.html">2025 Stats</a></li>
-
-
-	</ul>
-	</li>
-	<li><a href="https://crew.vuscg.com/pilots">Roster</a></li>
-	<li><a href="https://crew.vuscg.com/register" class="button primary">Join Us</a></li>
-
-</ul>
+<?php include (($_SERVER['DOCUMENT_ROOT'] ?? __DIR__) . '/_includes/nav.php'); ?>
 </nav>
 </header>
 
@@ -94,6 +65,37 @@ and interest levels to join our ranks and provide life saving support around the
 </div>
 </div>
 </section>
+
+<section class="wrapper style1 container special home-live-stats">
+<header class="major">
+<h2>Live <strong>vUSCG Stats</strong></h2>
+<p>Staffing metrics from our tracker and operational totals from phpVMS.</p>
+</header>
+
+<div class="row home-live-stats-grid">
+  <div class="col-3 col-6-narrower col-12-mobile"><section class="home-live-stat-card"><p class="label">Total Pilots</p><p class="value" data-stat="total_pilots">—</p></section></div>
+  <div class="col-3 col-6-narrower col-12-mobile"><section class="home-live-stat-card"><p class="label">Active Pilots</p><p class="value" data-stat="active_pilots">—</p></section></div>
+  <div class="col-3 col-6-narrower col-12-mobile"><section class="home-live-stat-card"><p class="label">Mission Rated</p><p class="value" data-stat="mission_rated_pilots">—</p></section></div>
+  <div class="col-3 col-6-narrower col-12-mobile"><section class="home-live-stat-card"><p class="label">In Training</p><p class="value" data-stat="currently_in_training">—</p></section></div>
+</div>
+
+<div class="row home-live-stats-grid">
+  <div class="col-3 col-6-narrower col-12-mobile"><section class="home-live-stat-card"><p class="label">Special Units</p><p class="value" data-stat="special_units">—</p></section></div>
+  <div class="col-3 col-6-narrower col-12-mobile"><section class="home-live-stat-card"><p class="label">IP Rated</p><p class="value" data-stat="ip_rated">—</p></section></div>
+  <div class="col-3 col-6-narrower col-12-mobile"><section class="home-live-stat-card"><p class="label">HITRON Rated</p><p class="value" data-stat="hitron_rated">—</p></section></div>
+  <div class="col-3 col-6-narrower col-12-mobile"><section class="home-live-stat-card"><p class="label">BLACK JACK</p><p class="value" data-stat="black_jack_rated">—</p></section></div>
+</div>
+
+<div class="row home-live-stats-grid">
+  <div class="col-3 col-6-narrower col-12-mobile"><section class="home-live-stat-card"><p class="label">MQ9 Rated</p><p class="value" data-stat="mq9_rated">—</p></section></div>
+  <div class="col-3 col-6-narrower col-12-mobile"><section class="home-live-stat-card"><p class="label">Total PIREPs</p><p class="value" data-stat="pireps">—</p></section></div>
+  <div class="col-3 col-6-narrower col-12-mobile"><section class="home-live-stat-card"><p class="label">Total Hours</p><p class="value" data-stat="hours">—</p></section></div>
+  <div class="col-3 col-6-narrower col-12-mobile"><section class="home-live-stat-card"><p class="label">Total Miles</p><p class="value" data-stat="miles">—</p></section></div>
+</div>
+
+<p class="home-live-stats-updated" id="homeStatsUpdatedAt">Loading live stats...</p>
+</section>
+
 <!-- Three -->
 
 <section class="wrapper style3 container special ops-gallery">
@@ -186,5 +188,7 @@ and interest levels to join our ranks and provide life saving support around the
 </ul>
 </footer>
 </div>
-<!-- Scripts --><script src="assets/js/jquery.min.js"></script><script src="assets/js/jquery.dropotron.min.js"></script><script src="assets/js/jquery.scrolly.min.js"></script><script src="assets/js/jquery.scrollex.min.js"></script><script src="assets/js/browser.min.js"></script><script src="assets/js/breakpoints.min.js"></script><script src="assets/js/util.js"></script><script src="assets/js/main.js"></script></body>
+<!-- Scripts --><script src="assets/js/jquery.min.js"></script><script src="assets/js/jquery.dropotron.min.js"></script><script src="assets/js/jquery.scrolly.min.js"></script><script src="assets/js/jquery.scrollex.min.js"></script><script src="assets/js/browser.min.js"></script><script src="assets/js/breakpoints.min.js"></script><script src="assets/js/util.js"></script>
+		<script src="assets/js/home-stats.js"></script>
+		<script src="assets/js/main.js"></script></body>
 </html>
