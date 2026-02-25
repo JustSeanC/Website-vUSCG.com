@@ -3538,3 +3538,44 @@ body.index .wrapper.style1.container.special .row > [class*="col-"] > section {
 body.index .wrapper.style1.container.special .row > [class*="col-"] > section .button {
     margin-top: auto;           /* push button to the bottom */
 }
+
+/* vUSCG: homepage live stats cards */
+.home-live-stats {
+	margin-top: 1.25em;
+}
+
+.home-live-stats .home-live-stats-grid {
+	margin-top: 0.5em;
+}
+
+.home-live-stats .home-live-stat-card {
+	background: rgba(255, 255, 255, 0.96);
+	border: 1px solid rgba(124, 128, 129, 0.2);
+	border-radius: 0.6em;
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+	padding: 1.2em 1em;
+	margin-bottom: 1em;
+}
+
+.home-live-stats .home-live-stat-card .label {
+	margin: 0;
+	font-size: 0.72em;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #606667;
+	font-weight: 700;
+}
+
+.home-live-stats .home-live-stat-card .value {
+	margin: 0.35em 0 0 0;
+	font-size: 2em;
+	line-height: 1.1em;
+	font-weight: 800;
+	color: #1f2a33;
+}
+
+.home-live-stats .home-live-stats-updated {
+	margin-top: 0.25em;
+	font-size: 0.82em;
+	opacity: 0.8;
+}
