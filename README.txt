@@ -69,6 +69,8 @@ A backwards-compatible alias also exists at `api/home-stats.php` for older links
    - `mysql`: set credentials and SQL directly (only if this host can reach that DB)
 4. Optional cache settings are in `cache`.
 
+Label matching for Google Sheet rows is normalized (uppercase + non-alphanumeric removed), so values like `BLACK_JACK`, `Black Jack`, and `BLACK-JACK` all map to `BLACKJACK`.
+
 
 ### Troubleshooting: "Live stats temporarily unavailable"
 
