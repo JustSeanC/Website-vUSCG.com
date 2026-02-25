@@ -1,2 +1,3 @@
-api/home-stats.config.php
-cache/home-stats.json
+api/stats-home.config.php
+api/stats-home.php
+cache/stats-home.json
