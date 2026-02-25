@@ -69,6 +69,19 @@ A backwards-compatible alias also exists at `api/home-stats.php` for older links
    - `mysql`: set credentials and SQL directly (only if this host can reach that DB)
 4. Optional cache settings are in `cache`.
 
+
+### Troubleshooting: "Live stats temporarily unavailable"
+
+Run these URLs directly in a browser and confirm they return JSON (not an HTML error page):
+- `https://vuscg.com/api/stats-home.php`
+- `https://vuscg.com/api/home-stats.php`
+
+If homepage still shows unavailable:
+- open browser DevTools Console and look for `[home-stats] All endpoints failed:` details
+- check that `api/stats-home.config.php` exists on the server and has valid values
+- verify your host serves PHP inside `/api/` and isn’t rewriting those URLs to HTML
+- if using phpVMS `http` mode, test `http_url` directly from the public server environment
+
 ### phpVMS Option A (recommended): crew endpoint
 
 Use an endpoint on crew host and let this public site call it.

@@ -45,32 +45,40 @@
       if (!response.ok) {
         throw new Error('HTTP ' + response.status + ' at ' + url);
       }
+
       return response.text().then(function (text) {
         try {
           return JSON.parse(text);
         } catch (e) {
-          throw new Error('Invalid JSON from ' + url);
+          throw new Error('Invalid JSON from ' + url + ' (received non-JSON response)');
         }
       });
     });
   }
 
   function loadStats() {
-    var endpoints = ['api/stats-home.php', 'api/home-stats.php'];
+    // Try absolute paths first (works if homepage is served from a nested route), then relative fallback.
+    var endpoints = ['/api/stats-home.php', '/api/home-stats.php', 'api/stats-home.php', 'api/home-stats.php'];
+    var errors = [];
 
     function tryNext(index) {
       if (index >= endpoints.length) {
-        setText('homeStatsUpdatedAt', 'Live stats temporarily unavailable');
+        var detail = errors.length ? ': ' + errors[errors.length - 1] : '';
+        setText('homeStatsUpdatedAt', 'Live stats temporarily unavailable' + detail);
+        if (typeof console !== 'undefined' && console.error) {
+          console.error('[home-stats] All endpoints failed:', errors);
+        }
         return;
       }
 
       fetchJson(endpoints[index])
         .then(function (data) {
           if (!applyStats(data)) {
-            throw new Error('Missing stats payload');
+            throw new Error('Missing stats payload at ' + endpoints[index]);
           }
         })
-        .catch(function () {
+        .catch(function (err) {
+          errors.push((err && err.message) ? err.message : 'Unknown error at ' + endpoints[index]);
           tryNext(index + 1);
         });
     }
