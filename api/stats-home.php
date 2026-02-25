@@ -20,10 +20,10 @@ $defaultStats = [
 ];
 
 $config = [
-    'google_sheet_csv_url' => '',
+    'google_sheet_csv_url' => 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9CMiFN7xl8kew3lQ-qzd1_DkpNM5P7CGxaJCtIIE6DPftzNHhWgDDDThyEbmjUJSbgl4jbY0aQF4M/pub?gid=278263233&single=true&output=csv',
     'phpvms' => [
         'mode' => 'http',
-        'http_url' => '',
+        'http_url' => 'https://crew.vuscg.com/api/stats-home.php',
         'http_headers' => [],
         'mysql' => [
             'host' => '127.0.0.1',

@@ -61,7 +61,8 @@ Top navigation is centralized in `_includes/nav.php` and included from each page
 Homepage live stats are loaded from `api/stats-home.php` and displayed in `index.html`.
 A backwards-compatible alias also exists at `api/home-stats.php` for older links/cached clients.
 
-1. Copy `api/stats-home.config.example.php` to `api/stats-home.config.php`.
+1. Copy `api/stats-home.config.example.php` to `api/stats-home.config.php` (recommended).
+   - If config is missing, endpoint falls back to built-in defaults for the current vUSCG sheet + crew API URL.
 2. Set `google_sheet_csv_url` to your **published CSV URL**:
    - Format: `https://docs.google.com/spreadsheets/d/<SHEET_ID>/export?format=csv&gid=<GID>`
 3. Configure phpVMS source in `phpvms.mode`:
