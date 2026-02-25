@@ -77,7 +77,7 @@ Run these URLs directly in a browser and confirm they return JSON (not an HTML e
 - `https://vuscg.com/api/home-stats.php`
 
 If homepage still shows unavailable:
-- open browser DevTools Console and look for `[home-stats] All endpoints failed:` details
+- open browser DevTools Console and look for `[home-stats] All endpoints failed:` details (canonical endpoint is `api/stats-home.php`)
 - check that `api/stats-home.config.php` exists on the server and has valid values
 - verify your host serves PHP inside `/api/` and isn’t rewriting those URLs to HTML
 - if using phpVMS `http` mode, test `http_url` directly from the public server environment
