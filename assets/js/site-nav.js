@@ -33,6 +33,20 @@
 
   function injectNav() {
     var navNodes = document.querySelectorAll('nav#nav');
+    var injected = false;
+
+    for (var i = 0; i < navNodes.length; i++) {
+      navNodes[i].innerHTML = navMarkup;
+      injected = true;
+    }
+
+    return injected;
+  }
+
+  // Inject immediately so main.js sees #nav > ul when it initializes dropdowns.
+  // Fallback to DOMContentLoaded if nav isn't in the DOM yet.
+  if (!injectNav()) {
+    document.addEventListener('DOMContentLoaded', injectNav);
     for (var i = 0; i < navNodes.length; i++) {
       navNodes[i].innerHTML = navMarkup;
     }
