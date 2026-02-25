@@ -58,7 +58,7 @@
 
   function loadStats() {
     // Try absolute paths first (works if homepage is served from a nested route), then relative fallback.
-    var endpoints = ['/api/stats-home.php', '/api/home-stats.php', 'api/stats-home.php', 'api/home-stats.php'];
+    var endpoints = ['/api/stats-home.php', '/api/stats-home.php', 'api/stats-home.php', 'api/stats-home.php'];
     var errors = [];
 
     function tryNext(index) {
@@ -66,7 +66,7 @@
         var detail = errors.length ? ': ' + errors[errors.length - 1] : '';
         setText('homeStatsUpdatedAt', 'Live stats temporarily unavailable' + detail);
         if (typeof console !== 'undefined' && console.error) {
-          console.error('[home-stats] All endpoints failed:', errors);
+          console.error('[stats-home] All endpoints failed:', errors);
         }
         return;
       }
