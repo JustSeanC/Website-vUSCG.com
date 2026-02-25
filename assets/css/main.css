@@ -2698,7 +2698,7 @@ body.index #cta .button:hover {
 
 /* Footer */
 
-	#footer {
+		#footer {
     background-color: #E8EEF4;
     background-image: url("../../images/back.png");
     background-position: center;
@@ -2706,7 +2706,57 @@ body.index #cta .button:hover {
     background-repeat: no-repeat;
     color: #7c8081;
     padding: 5em 5em 10em 5em;
-    text-align: center;
+	    text-align: center;
+}
+
+/* vUSCG: improve readability on photo footer backgrounds */
+body:not(.index) #footer {
+	position: relative;
+	color: #ffffff;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+}
+
+body:not(.index) #footer:before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: rgba(14, 22, 34, 0.42);
+	pointer-events: none;
+}
+
+body:not(.index) #footer > * {
+	position: relative;
+	z-index: 1;
+}
+
+body:not(.index) #footer .copyright a {
+	color: #ffffff;
+	font-weight: 400;
+}
+
+body:not(.index) #footer .icon.circle.fa-discord {
+	background: rgba(88, 101, 242, 0.92);
+	color: #ffffff;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+/* vUSCG: translucent highlight panels behind footer content */
+body:not(.index) #footer .icons,
+body:not(.index) #footer .copyright {
+	display: inline-block;
+	background: rgba(0, 0, 0, 0.38);
+	padding: 0.7em 1em;
+	border-radius: 0.6em;
+	backdrop-filter: blur(2px);
+	-webkit-backdrop-filter: blur(2px);
+}
+
+body:not(.index) #footer .icons {
+	margin-bottom: 0.9em;
+}
+
+body:not(.index) #footer .copyright {
+	line-height: 1.4em;
 }
 /* vUSCG: simpler footer on the index (home) page */
 body.index #footer {
@@ -3487,4 +3537,45 @@ body.index .wrapper.style1.container.special .row > [class*="col-"] > section {
 
 body.index .wrapper.style1.container.special .row > [class*="col-"] > section .button {
     margin-top: auto;           /* push button to the bottom */
+}
+
+/* vUSCG: homepage live stats cards */
+.home-live-stats {
+	margin-top: 1.25em;
+}
+
+.home-live-stats .home-live-stats-grid {
+	margin-top: 0.5em;
+}
+
+.home-live-stats .home-live-stat-card {
+	background: rgba(255, 255, 255, 0.96);
+	border: 1px solid rgba(124, 128, 129, 0.2);
+	border-radius: 0.6em;
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+	padding: 1.2em 1em;
+	margin-bottom: 1em;
+}
+
+.home-live-stats .home-live-stat-card .label {
+	margin: 0;
+	font-size: 0.72em;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #606667;
+	font-weight: 700;
+}
+
+.home-live-stats .home-live-stat-card .value {
+	margin: 0.35em 0 0 0;
+	font-size: 2em;
+	line-height: 1.1em;
+	font-weight: 800;
+	color: #1f2a33;
+}
+
+.home-live-stats .home-live-stats-updated {
+	margin-top: 0.25em;
+	font-size: 0.82em;
+	opacity: 0.8;
 }
