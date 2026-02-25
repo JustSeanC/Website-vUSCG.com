@@ -35,11 +35,11 @@ $config = [
     'cache' => [
         'enabled' => true,
         'ttl_seconds' => 300,
-        'file' => __DIR__ . '/../cache/home-stats.json',
+        'file' => __DIR__ . '/../cache/stats-home.json',
     ],
 ];
 
-$configPath = __DIR__ . '/home-stats.config.php';
+$configPath = __DIR__ . '/stats-home.config.php';
 if (is_file($configPath)) {
     $userConfig = include $configPath;
     if (is_array($userConfig)) {
