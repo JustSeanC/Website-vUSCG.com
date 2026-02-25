@@ -1,10 +1,10 @@
 <ul>
-	<li class="submenu"><a href="#">About</a>
+	<li class="submenu"><a href="about.html">About</a>
 	<ul>
 		<li><a href="about.html">About Us</a></li>
 		<li><a href="staff.html">Staff</a></li>
 		<li><a href="partners.html">Partners</a></li>
-		<li class="submenu"><a href="#">Policy</a>
+		<li class="submenu"><a href="sop.html">Policy</a>
 		<ul>
 			<li><a href="sop.html">General SOP</a></li>
 			<li><a href="https://docs.google.com/document/d/1dULzrl4F9T-Hg8KkAth8GAA5x-krxLjPcFlS4YDioRM/edit?usp=sharing">Privacy Policy</a></li>
@@ -13,7 +13,7 @@
 		</li>
 	</ul>
 	</li>
-	<li class="submenu"><a href="#">Operations</a>
+	<li class="submenu"><a href="fleet.html">Operations</a>
 	<ul>
 		<li><a href="fleet.html">Fleet</a></li>
 		<li><a href="districts.html">Districts</a></li>
