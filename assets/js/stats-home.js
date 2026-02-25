@@ -23,9 +23,27 @@
     var stats = payload && payload.stats ? payload.stats : payload;
     if (!stats || typeof stats !== 'object') return false;
 
+    var statAliases = {
+      hitron_rated: ['hitron', 'hitron_pilots', 'hitron_rated_pilots'],
+      black_jack_rated: ['blackjack_rated', 'blackjack', 'black_jack', 'blackjack_pilots', 'black_jack_pilots'],
+    };
+
     Object.keys(stats).forEach(function (key) {
       var node = document.querySelector('[data-stat="' + key + '"]');
       if (node) node.textContent = formatValue(key, stats[key]);
+    });
+
+    Object.keys(statAliases).forEach(function (targetKey) {
+      if (stats[targetKey] !== null && stats[targetKey] !== undefined && stats[targetKey] !== '') return;
+
+      for (var i = 0; i < statAliases[targetKey].length; i++) {
+        var sourceKey = statAliases[targetKey][i];
+        if (stats[sourceKey] === null || stats[sourceKey] === undefined || stats[sourceKey] === '') continue;
+
+        var targetNode = document.querySelector('[data-stat="' + targetKey + '"]');
+        if (targetNode) targetNode.textContent = formatValue(targetKey, stats[sourceKey]);
+        break;
+      }
     });
 
     if (payload && payload.updated_at) {
