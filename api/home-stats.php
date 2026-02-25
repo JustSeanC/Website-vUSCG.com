@@ -6,6 +6,7 @@ $defaultStats = [
     'active_pilots' => null,
     'mission_rated_pilots' => null,
     'currently_in_training' => null,
+    'currently_flying' => null,
     'special_units' => null,
     'ip_rated' => null,
     'hitron_rated' => null,
@@ -116,6 +117,7 @@ function load_google_sheet_stats($url)
         'ACTIVEPILOTS' => 'active_pilots',
         'MISSIONRATEDPILOTS' => 'mission_rated_pilots',
         'CURRENTLYINTRAINING' => 'currently_in_training',
+        'CURRENTLYFLYING' => 'currently_flying',
         'SPECIALUNITS' => 'special_units',
         'IP' => 'ip_rated',
         'HITRON' => 'hitron_rated',
@@ -181,6 +183,7 @@ function load_phpvms_stats($cfg)
             'pireps' => numeric_or_null($data['pireps'] ?? null),
             'hours' => numeric_or_null($data['hours'] ?? null),
             'miles' => numeric_or_null($data['miles'] ?? null),
+            'currently_flying' => numeric_or_null($data['currently_flying'] ?? null),
         ];
     }
 

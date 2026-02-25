@@ -1,9 +1,16 @@
 (function () {
+  function formatNumber(value, options) {
+    var n = Number(value);
+    if (!isFinite(n)) return '—';
+    return n.toLocaleString(undefined, options || {});
+  }
+
   function formatValue(key, value) {
     if (value === null || value === undefined || value === '') return '—';
 
-    if (key === 'hours') return Number(value).toLocaleString(undefined, { maximumFractionDigits: 1 });
-    if (key === 'miles' || key === 'pireps') return Number(value).toLocaleString();
+    if (key === 'hours') return formatNumber(value, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    if (key === 'miles') return formatNumber(value, { maximumFractionDigits: 1 });
+    if (key === 'pireps' || key === 'currently_flying') return formatNumber(value, { maximumFractionDigits: 0 });
     return String(value);
   }
 

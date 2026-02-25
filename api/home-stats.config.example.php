@@ -25,7 +25,7 @@ return [
             'database' => '',
             'username' => '',
             'password' => '',
-            'query' => "SELECT COUNT(*) AS pireps, COALESCE(SUM(flight_time),0) AS hours, COALESCE(SUM(distance),0) AS miles FROM pireps",
+            'query' => "SELECT COUNT(*) AS pireps, ROUND(COALESCE(SUM(flight_time),0)/60,1) AS hours, COALESCE(SUM(distance),0) AS miles FROM pireps",
         ],
     ],
 
