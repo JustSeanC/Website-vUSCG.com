@@ -47,5 +47,14 @@
   // Fallback to DOMContentLoaded if nav isn't in the DOM yet.
   if (!injectNav()) {
     document.addEventListener('DOMContentLoaded', injectNav);
+    for (var i = 0; i < navNodes.length; i++) {
+      navNodes[i].innerHTML = navMarkup;
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', injectNav);
+  } else {
+    injectNav();
   }
 })();
