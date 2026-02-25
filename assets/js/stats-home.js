@@ -26,6 +26,7 @@
     var hasAnyValue = false;
 
     var statAliases = {
+      currently_flying: ['active_flights', 'flights_in_progress'],
       hitron_rated: ['hitron', 'hitron_pilots', 'hitron_rated_pilots'],
       black_jack_rated: ['blackjack_rated', 'blackjack', 'black_jack', 'blackjack_pilots', 'black_jack_pilots'],
     };
@@ -86,7 +87,13 @@
 
   function loadStats() {
     // Canonical endpoint(s) first; legacy alias is a last-resort fallback.
-    var endpoints = ['api/stats-home.php', '/api/stats-home.php', 'api/home-stats.php', '/api/home-stats.php'];
+    var endpoints = [
+      'api/stats-home.php',
+      '/api/stats-home.php',
+      'https://crew.vuscg.com/api/stats-home.php',
+      'api/home-stats.php',
+      '/api/home-stats.php'
+    ];
     var errors = [];
 
     function summarizePrimaryFailure() {
