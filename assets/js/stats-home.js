@@ -23,6 +23,8 @@
     var stats = payload && payload.stats ? payload.stats : payload;
     if (!stats || typeof stats !== 'object') return false;
 
+    var hasAnyValue = false;
+
     var statAliases = {
       hitron_rated: ['hitron', 'hitron_pilots', 'hitron_rated_pilots'],
       black_jack_rated: ['blackjack_rated', 'blackjack', 'black_jack', 'blackjack_pilots', 'black_jack_pilots'],
@@ -30,6 +32,9 @@
 
     Object.keys(stats).forEach(function (key) {
       var node = document.querySelector('[data-stat="' + key + '"]');
+      if (stats[key] !== null && stats[key] !== undefined && stats[key] !== '') {
+        hasAnyValue = true;
+      }
       if (node) node.textContent = formatValue(key, stats[key]);
     });
 
@@ -42,9 +47,14 @@
 
         var targetNode = document.querySelector('[data-stat="' + targetKey + '"]');
         if (targetNode) targetNode.textContent = formatValue(targetKey, stats[sourceKey]);
+        hasAnyValue = true;
         break;
       }
     });
+
+    if (!hasAnyValue) {
+      return false;
+    }
 
     if (payload && payload.updated_at) {
       var updated = new Date(payload.updated_at);
