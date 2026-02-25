@@ -1,2 +1,8 @@
+# Local/private API config (contains real URLs/tokens/passwords)
+api/stats-home.config.php
+
+# Legacy local config path (kept ignored for safety)
 api/home-stats.config.php
-cache/home-stats.json
+
+# Runtime cache output
+cache/*.json
