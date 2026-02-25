@@ -55,15 +55,3 @@ Top navigation is centralized in `_includes/nav.php` and included from each page
 - `.html` pages are configured to run through PHP via `.htaccess` so includes work without renaming pages.
 - Keep `<nav id="nav">` in each page and include the shared nav partial inside it.
 
-
-## Home Live Stats
-
-Homepage live stats are loaded from `api/home-stats.php` and displayed in `index.html`.
-
-- Copy `api/home-stats.config.example.php` to `api/home-stats.config.php`.
-- Set `google_sheet_csv_url` to your published Google Sheet CSV URL.
-- Configure phpVMS source in `phpvms.mode`:
-  - `http`: provide an endpoint that returns `pireps`, `hours`, `miles`.
-  - `mysql`: set credentials and SQL query that returns `pireps`, `hours`, `miles` columns.
-- Optional cache settings are in the `cache` section.
-
