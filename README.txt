@@ -58,9 +58,9 @@ Top navigation is centralized in `_includes/nav.php` and included from each page
 
 ## Home Live Stats
 
-Homepage live stats are loaded from `api/home-stats.php` and displayed in `index.html`.
+Homepage live stats are loaded from `api/stats-home.php` and displayed in `index.html`.
 
-1. Copy `api/home-stats.config.example.php` to `api/home-stats.config.php`.
+1. Copy `api/stats-home.config.example.php` to `api/stats-home.config.php`.
 2. Set `google_sheet_csv_url` to your **published CSV URL**:
    - Format: `https://docs.google.com/spreadsheets/d/<SHEET_ID>/export?format=csv&gid=<GID>`
 3. Configure phpVMS source in `phpvms.mode`:
@@ -77,7 +77,7 @@ Use an endpoint on crew host and let this public site call it.
 - Update DB credentials in that file.
 - Test endpoint directly in browser:
   - `https://crew.vuscg.com/api/stats-home.php`
-- Then set `phpvms.mode = 'http'` and `http_url` in `api/home-stats.config.php` on this public site.
+- Then set `phpvms.mode = 'http'` and `http_url` in `api/stats-home.config.php` on this public site.
 
 ### Finding DB username/password
 
