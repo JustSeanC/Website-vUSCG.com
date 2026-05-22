@@ -9,3 +9,4 @@ cache/*.json
 error_log
 *.log
 cache/
+wellknown.zip
