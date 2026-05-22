@@ -82,9 +82,11 @@ try {
     $landingRateCol = has_col($pirepCols, 'landing_rate') ? 'landing_rate' : (has_col($pirepCols, 'landingrate') ? 'landingrate' : null);
     $pilotIdCol = has_col($userCols, 'pilot_id') ? 'pilot_id' : 'id';
     $nameExpr = has_col($userCols, 'name') ? 'u.name' : ((has_col($userCols, 'first_name') && has_col($userCols, 'last_name')) ? "CONCAT(COALESCE(u.first_name,''), ' ', COALESCE(u.last_name,''))" : 'CAST(u.id AS CHAR)');
+    $hasAccepted = has_col($pirepCols, 'accepted');
 
     $where = [];
     $params = [];
+    if ($hasAccepted) { $where[] = 'p.accepted = 1'; }
     if ($year > 0) { $where[] = 'YEAR(p.submitted_at) = :year'; $params[':year'] = $year; }
     if ($month > 0) { $where[] = 'MONTH(p.submitted_at) = :month'; $params[':month'] = $month; }
     $whereSql = $where ? (' WHERE ' . implode(' AND ', $where)) : '';
@@ -94,7 +96,7 @@ try {
     $st->execute($params);
     $summary = $st->fetch() ?: [];
 
-    $active90Sql = "SELECT COUNT(DISTINCT user_id) AS active_pilots_90d FROM pireps WHERE submitted_at >= (UTC_TIMESTAMP() - INTERVAL 90 DAY)";
+    $active90Sql = "SELECT COUNT(DISTINCT user_id) AS active_pilots_90d FROM pireps WHERE submitted_at >= (UTC_TIMESTAMP() - INTERVAL 90 DAY)" . ($hasAccepted ? " AND accepted = 1" : "");
     $activePilots90 = (int)($pdo->query($active90Sql)->fetch()['active_pilots_90d'] ?? 0);
 
     $yearLabel = ($year === 0) ? 'Lifetime' : (string)$year;
@@ -102,7 +104,7 @@ try {
 
     $monthly = [];
     if ($year > 0) {
-        $mSql = "SELECT MONTH(submitted_at) AS m, COUNT(*) AS flights, COALESCE(SUM(flight_time),0)/60.0 AS hours, COALESCE(SUM(distance),0) AS miles FROM pireps WHERE YEAR(submitted_at)=:year GROUP BY MONTH(submitted_at) ORDER BY MONTH(submitted_at)";
+        $mSql = "SELECT MONTH(submitted_at) AS m, COUNT(*) AS flights, COALESCE(SUM(flight_time),0)/60.0 AS hours, COALESCE(SUM(distance),0) AS miles FROM pireps WHERE YEAR(submitted_at)=:year" . ($hasAccepted ? " AND accepted = 1" : "") . " GROUP BY MONTH(submitted_at) ORDER BY MONTH(submitted_at)";
         $mSt = $pdo->prepare($mSql);
         $mSt->execute([':year' => $year]);
         $byMonth = [];
@@ -112,7 +114,7 @@ try {
             $monthly[] = ['label' => gmdate('M', gmmktime(0,0,0,$m,1,2000)), 'flights' => (int)($row['flights'] ?? 0), 'hours' => round((float)($row['hours'] ?? 0), 1), 'miles' => round((float)($row['miles'] ?? 0), 1)];
         }
     } else {
-        $ySql = "SELECT YEAR(submitted_at) AS y, COUNT(*) AS flights, COALESCE(SUM(flight_time),0)/60.0 AS hours, COALESCE(SUM(distance),0) AS miles FROM pireps WHERE submitted_at IS NOT NULL GROUP BY YEAR(submitted_at) ORDER BY YEAR(submitted_at)";
+        $ySql = "SELECT YEAR(submitted_at) AS y, COUNT(*) AS flights, COALESCE(SUM(flight_time),0)/60.0 AS hours, COALESCE(SUM(distance),0) AS miles FROM pireps WHERE submitted_at IS NOT NULL" . ($hasAccepted ? " AND accepted = 1" : "") . " GROUP BY YEAR(submitted_at) ORDER BY YEAR(submitted_at)";
         $yRows = $pdo->query($ySql)->fetchAll() ?: [];
         foreach ($yRows as $r) {
             $yy = (int)($r['y'] ?? 0);
@@ -165,6 +167,7 @@ try {
         'month_top_flights' => $topFlights,
         'month_top_hours' => $topHours,
         'monthly' => $monthly,
+        'meta' => ['accepted_filter_applied' => $hasAccepted],
     ]);
 } catch (Throwable $e) {
     http_response_code(500);
