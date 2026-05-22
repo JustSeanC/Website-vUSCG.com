@@ -166,6 +166,22 @@
 
     /* Make charts full width */
     canvas{ width:100%; display:block; }
+    .chartWrap{ position:relative; margin-top:10px; }
+    .chartFlag{
+      position:absolute;
+      pointer-events:none;
+      transform: translate(-50%, -110%);
+      background: rgba(7,12,24,.95);
+      border:1px solid rgba(120,255,214,.45);
+      border-radius:10px;
+      padding:6px 8px;
+      font-size:12px;
+      font-weight:800;
+      white-space:nowrap;
+      box-shadow:0 8px 20px rgba(0,0,0,.35);
+      display:none;
+      z-index:3;
+    }
 
     /* Airframe bars */
     .barRow{
@@ -269,6 +285,12 @@
       </div>
 
       <div class="card span-3">
+        <div class="label">Active Pilots</div>
+        <div class="value" id="activePilots">—</div>
+        <div class="sub">Pilots with a flight in the last 90 days</div>
+      </div>
+
+      <div class="card span-3">
         <div class="label">Flights</div>
         <div class="value" id="flights">—</div>
         <div class="sub">Completed flights in the selected year</div>
@@ -306,14 +328,17 @@
           </select>
         </div>
         <div class="sub" id="chartSub" style="margin-top:8px;">—</div>
-        <div style="margin-top:10px;">
+        <div class="chartWrap">
           <canvas id="trendChart" height="220"></canvas>
+          <div id="chartFlag" class="chartFlag" role="status" aria-live="polite"></div>
         </div>
       </div>
 
       <div class="card span-12">
         <div class="label">Top Airframes by Hours</div>
         <div id="airframes" class="sub" style="margin-top:10px;">Loading…</div>
+        <div id="trainingAirframes" class="sub" style="margin-top:14px;"></div>
+        <div id="auxAirframes" class="sub" style="margin-top:14px;"></div>
       </div>
 
       <div class="card span-6">
@@ -383,6 +408,8 @@
   let currentData = null;
   let selectedMonth = 0;
   let isSettingMonth = false;
+  let chartPoints = [];
+  let chartMetric = 'flights';
 
   // Year dropdown: Lifetime + years
   {
@@ -522,6 +549,31 @@
       const x = x0 + xStep * i;
       ctx.fillText(lab, x, h - 10);
     });
+
+    return values.map((v, i) => ({ label: labels[i], value: v, x: x0 + xStep * i, y: y0 - (v * yScale) }));
+  }
+
+
+  function splitAirframes(list){
+    const trainingKeywords = ['TH-57','TH57','TRAIN','BELL'];
+    const auxKeywords = ['AUX','AUXILIARY'];
+    const primary = [];
+    const training = [];
+    const aux = [];
+
+    (Array.isArray(list) ? list : []).forEach(row => {
+      const frame = String(row?.airframe || '').toUpperCase();
+      const airport = String(row?.airport || row?.dep_icao || row?.arr_icao || '').toUpperCase();
+      const isNDZ = airport.includes('NDZ');
+      const isTraining = trainingKeywords.some(k => frame.includes(k));
+      const isAux = auxKeywords.some(k => frame.includes(k));
+
+      if (isAux) aux.push(row);
+      else if (isTraining || (isNDZ && frame.includes('BELL'))) training.push(row);
+      else primary.push(row);
+    });
+
+    return { primary, training, aux };
   }
 
   function renderAirframes(list){
@@ -710,7 +762,36 @@
     $('chartTitle').textContent = meta.title;
     $('chartSub').textContent = meta.sub(values);
 
-    drawLineChart('trendChart', labels, values, { yFormatter: meta.yFormatter });
+    chartMetric = metric;
+    chartPoints = drawLineChart('trendChart', labels, values, { yFormatter: meta.yFormatter }) || [];
+    wireChartHover();
+  }
+
+
+  function wireChartHover(){
+    const canvas = $('trendChart');
+    const flag = $('chartFlag');
+    if (!canvas || !flag) return;
+
+    const handleMove = (ev) => {
+      if (!chartPoints.length) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = ev.clientX - rect.left;
+      let closest = chartPoints[0];
+      let dist = Math.abs(closest.x - x);
+      for (const pt of chartPoints) {
+        const d = Math.abs(pt.x - x);
+        if (d < dist) { closest = pt; dist = d; }
+      }
+      const unit = chartMetric === 'hours' ? 'h' : (chartMetric === 'miles' ? 'mi' : 'flights');
+      flag.textContent = `${closest.label}: ${nf1.format(closest.value)} ${unit}`;
+      flag.style.left = `${closest.x}px`;
+      flag.style.top = `${closest.y}px`;
+      flag.style.display = 'block';
+    };
+
+    canvas.onmousemove = handleMove;
+    canvas.onmouseleave = () => { flag.style.display = 'none'; };
   }
 
   function buildMonthSelectOptions(yearNumber, monthToSelect){
@@ -753,17 +834,19 @@
 
   async function loadYear(year, month = 0){
     setText('lead', 'Loading…');
-    ['pilots','flights','hours','miles','currentlyFlying'].forEach(id => setText(id,'—'));
+    ['pilots','activePilots','flights','hours','miles','currentlyFlying'].forEach(id => setText(id,'—'));
     $('airframes').textContent = 'Loading…';
     $('bestLandings').textContent = 'Loading…';
     $('worstLandings').textContent = 'Loading…';
     $('topFlights').textContent = 'Loading…';
     $('topHours').textContent = 'Loading…';
+    $('trainingAirframes').textContent = '';
+    $('auxAirframes').textContent = '';
 
     // Hide live card until we confirm current-year selection
     if (liveCard) liveCard.classList.add('isHidden');
 
-    let url = `https://crew.vuscg.com/api/stats-year.php?year=${encodeURIComponent(year)}`;
+    let url = `https://vuscg.com/api/stats-year.php?year=${encodeURIComponent(year)}`;
     if (month !== null && month !== undefined) {
       const m = Number(month);
       if (m >= 0 && m <= 12) url += `&month=${encodeURIComponent(m)}`;
@@ -807,6 +890,7 @@
     setText('updatedAt', new Date(data.updated_at).toLocaleString());
 
     setText('pilots', nf.format(data.pilots ?? 0));
+    setText('activePilots', nf.format(data.active_pilots_90d ?? data.active_pilots ?? 0));
     setText('flights', nf.format(data.flights ?? 0));
     setText('hours', nf1.format(data.hours ?? 0));
     setText('miles', nf1.format(data.miles ?? 0));
@@ -833,7 +917,14 @@
     renderPilotList('topHours', data.month_top_hours, 'hours');
 
     // Airframes + chart
-    renderAirframes(data.top_airframes);
+    const split = splitAirframes(data.top_airframes);
+    renderAirframes(split.primary);
+    if (split.training.length) {
+      $('trainingAirframes').textContent = `Training fleet separated (${split.training.length} entries filtered, including NDZ Bell/training aircraft).`;
+    }
+    if (split.aux.length) {
+      $('auxAirframes').textContent = `Aux air stats separated (${split.aux.length} entries).`;
+    }
     updateChart();
   }
 
