@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>vUSCG • Year at a Glance</title>
+
+  <style>
+    :root{
+      --max: 1280px;
+      --radius: 16px;
+      --border: rgba(255,255,255,.14);
+      --muted: rgba(255,255,255,.72);
+    }
+
+    body{
+      margin:0;
+      font-family: system-ui,-apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height:1.4;
+      color:#fff;
+      background:
+        radial-gradient(900px 480px at 70% 10%, rgba(88,154,255,.10), transparent 55%),
+        radial-gradient(800px 420px at 10% 0%, rgba(120,255,214,.06), transparent 55%),
+        repeating-linear-gradient(0deg, rgba(255,255,255,.04), rgba(255,255,255,.04) 1px, transparent 1px, transparent 26px),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.03), rgba(255,255,255,.03) 1px, transparent 1px, transparent 26px),
+        #0b1220;
+    }
+
+    main{ max-width:var(--max); margin:0 auto; padding:30px 16px 70px; }
+
+    .hero{
+      border-radius: calc(var(--radius) + 8px);
+      border:1px solid var(--border);
+      background:
+        radial-gradient(1200px 380px at 10% 10%, rgba(88,154,255,.25), transparent 60%),
+        radial-gradient(900px 320px at 90% 0%, rgba(120,255,214,.12), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: 0 18px 70px rgba(0,0,0,.35);
+      padding: 22px;
+    }
+
+    /* Top mini-nav */
+    .topNav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom: 12px;
+    }
+    .breadcrumb{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-weight: 900;
+      color: rgba(255,255,255,.82);
+      text-decoration:none;
+    }
+    .navActions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .btnLink{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      text-decoration:none;
+      font-weight: 900;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      color:#fff;
+    }
+    .btnLink:hover{ background: rgba(255,255,255,.10); }
+    .btnPrimary{ border-color: rgba(120,255,214,.35); }
+
+    .topRow{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; }
+
+    .kicker{
+      display:inline-block;
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--muted);
+      border:1px solid var(--border);
+      border-radius:999px;
+      padding:7px 10px;
+      background: rgba(255,255,255,.03);
+    }
+
+    h1{ margin: 12px 0 6px; font-size: clamp(28px, 4vw, 44px); line-height:1.05; }
+    .lead{ margin:0; color:var(--muted); max-width: 90ch; }
+
+    .controls{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+
+    select{
+      background: rgba(255,255,255,.06);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.18);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-weight: 800;
+      outline:none;
+    }
+
+    .grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap:14px; margin-top:16px; }
+
+    .card{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.04);
+      box-shadow: 0 10px 28px rgba(0,0,0,.25);
+      padding: 14px;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.055);
+      border-color: rgba(255,255,255,.22);
+    }
+
+    .span-3{ grid-column: span 3; }
+    .span-6{ grid-column: span 6; }
+    .span-12{ grid-column: span 12; }
+
+    .label{
+      font-size:12px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    .value{
+      margin-top:8px;
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    .sub{ margin-top:6px; font-size:13px; color:var(--muted); }
+
+    .pill{
+      display:inline-flex; gap:8px; align-items:center;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-weight: 900;
+      color:#fff;
+    }
+    .muted{ color: var(--muted); font-weight: 700; }
+
+    .chartHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .chartSelect{
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-weight: 900;
+    }
+
+    /* Make charts full width */
+    canvas{ width:100%; display:block; }
+
+    /* Airframe bars */
+    .barRow{
+      display:grid;
+      grid-template-columns: 90px 1fr 70px;
+      gap:10px;
+      align-items:center;
+      margin-top:10px;
+    }
+    .barLabel{ font-weight: 900; font-size: 14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .barWrap{
+      position:relative;
+      height: 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.08);
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .barFill{
+      position:absolute; inset:0 auto 0 0;
+      width: 0%;
+      border-radius:999px;
+      background: linear-gradient(90deg, rgba(88,154,255,.9), rgba(120,255,214,.8));
+    }
+    .barValue{ text-align:right; font-variant-numeric: tabular-nums; color: var(--muted); }
+
+    /* Card header with month select */
+    .cardHead{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+    }
+    .monthSelect{
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-weight: 900;
+    }
+
+    /* Landing + leaderboard rows */
+    .lrRow, .lbRow{
+      display:grid;
+      grid-template-columns: 92px 1fr 120px;
+      gap:10px;
+      align-items:center;
+      padding:8px 0;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    .lrRow:last-child, .lbRow:last-child{ border-bottom:none; }
+    .lrPilot, .lbPilot{ font-weight: 900; }
+    .lrName, .lbName{ color: rgba(255,255,255,.75); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .lrRate{ text-align:right; font-variant-numeric: tabular-nums; font-weight: 900; }
+    .lrRate.good{ color: rgba(120,255,214,.90); }
+    .lrRate.bad{ color: rgba(255,140,140,.90); }
+    .lbVal{ text-align:right; font-variant-numeric: tabular-nums; font-weight: 900; color: rgba(255,255,255,.82); }
+
+    /* Clickable live card */
+    .cardLink{ display:block; color:inherit; text-decoration:none; }
+    .cardLink:focus{ outline: 2px solid rgba(120,255,214,.45); outline-offset: 3px; }
+    .isHidden{ display:none !important; }
+
+    @media (max-width: 900px){
+      .span-3, .span-6{ grid-column: span 12; }
+      .barRow{ grid-template-columns: 1fr; }
+      .barValue{ text-align:left; }
+      .lrRow, .lbRow{ grid-template-columns: 1fr; }
+      .lrRate, .lbVal{ text-align:left; }
+    }
+  </style>
+</head>
+
+<body>
+<main>
+  <section class="hero">
+
+    <!-- Mini nav -->
+    <div class="topNav">
+      <a class="breadcrumb" href="/index.html">← Home</a>
+      <div class="navActions">
+        <a class="btnLink btnPrimary" href="https://crew.vuscg.com/register" target="_blank" rel="noopener">Join Now</a>
+      </div>
+    </div>
+
+    <div class="topRow">
+      <span class="kicker" id="kicker">Year at a Glance</span>
+
+      <div class="controls">
+        <span class="pill">Live <span class="muted" id="updatedAt">—</span></span>
+        <select id="yearSelect" aria-label="Select year"></select>
+      </div>
+    </div>
+
+    <h1 id="title">vUSCG Stats</h1>
+    <p class="lead" id="lead">Loading…</p>
+
+    <div class="grid">
+      <div class="card span-3">
+        <div class="label">Pilots</div>
+        <div class="value" id="pilots">—</div>
+        <div class="sub">Unique pilots with completed flights</div>
+      </div>
+
+      <div class="card span-3">
+        <div class="label">Flights</div>
+        <div class="value" id="flights">—</div>
+        <div class="sub">Completed flights in the selected year</div>
+      </div>
+
+      <div class="card span-3">
+        <div class="label">Hours</div>
+        <div class="value" id="hours">—</div>
+        <div class="sub" id="hoursDisplay">—</div>
+      </div>
+
+      <div class="card span-3">
+        <div class="label">Miles</div>
+        <div class="value" id="miles">—</div>
+        <div class="sub">Total distance</div>
+      </div>
+
+      <a id="liveCard"
+         class="card span-12 cardLink"
+         href="https://crew.vuscg.com/livemap"
+         target="_blank"
+         rel="noopener">
+        <div class="label">Currently Flying (Live) →</div>
+        <div class="value" id="currentlyFlying">—</div>
+        <div class="sub">Click to open the live map</div>
+      </a>
+
+      <div class="card span-12">
+        <div class="chartHead">
+          <div class="label" id="chartTitle">Flights Per Month</div>
+          <select id="metricSelect" class="chartSelect" aria-label="Select chart metric">
+            <option value="flights">Flights</option>
+            <option value="hours">Hours</option>
+            <option value="miles">Miles</option>
+          </select>
+        </div>
+        <div class="sub" id="chartSub" style="margin-top:8px;">—</div>
+        <div style="margin-top:10px;">
+          <canvas id="trendChart" height="220"></canvas>
+        </div>
+      </div>
+
+      <div class="card span-12">
+        <div class="label">Top Airframes by Hours</div>
+        <div id="airframes" class="sub" style="margin-top:10px;">Loading…</div>
+      </div>
+
+      <div class="card span-6">
+        <div class="cardHead">
+          <div>
+            <div class="label">Top Flights</div>
+            <div class="sub">Most flights logged • <span id="monthLabelC">—</span></div>
+          </div>
+          <select class="monthSelect" aria-label="Select month (top flights)"></select>
+        </div>
+        <div id="topFlights" style="margin-top:10px;">Loading…</div>
+      </div>
+
+      <div class="card span-6">
+        <div class="cardHead">
+          <div>
+            <div class="label">Top Hours</div>
+            <div class="sub">Most hours logged • <span id="monthLabelD">—</span></div>
+          </div>
+          <select class="monthSelect" aria-label="Select month (top hours)"></select>
+        </div>
+        <div id="topHours" style="margin-top:10px;">Loading…</div>
+      </div>
+
+      <div class="card span-6">
+        <div class="cardHead">
+          <div>
+            <div class="label" id="bestTitle">Best Landings</div>
+            <div class="sub">Closest to 0 wins a cookie! • <span id="monthLabelA">—</span></div>
+          </div>
+          <select class="monthSelect" aria-label="Select month (best landings)"></select>
+        </div>
+        <div id="bestLandings" style="margin-top:10px;">Loading…</div>
+      </div>
+
+      <div class="card span-6">
+        <div class="cardHead">
+          <div>
+            <div class="label" id="worstTitle">Worst Landings</div>
+            <div class="sub">How the heck did these people finish training?! • <span id="monthLabelB">—</span></div>
+          </div>
+          <select class="monthSelect" aria-label="Select month (worst landings)"></select>
+        </div>
+        <div id="worstLandings" style="margin-top:10px;">Loading…</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+
+  const yearSelect = $('yearSelect');
+  const metricSelect = $('metricSelect');
+  const monthSelectEls = Array.from(document.querySelectorAll('.monthSelect'));
+
+  const liveCard = document.getElementById('liveCard');
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
+
+  const nf = new Intl.NumberFormat('en-US');
+  const nf1 = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 });
+
+  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  let currentData = null;
+  let selectedMonth = 0;
+  let isSettingMonth = false;
+
+  // Year dropdown: Lifetime + years
+  {
+    const optLife = document.createElement('option');
+    optLife.value = '0';
+    optLife.textContent = 'Lifetime';
+    yearSelect.appendChild(optLife);
+  }
+
+  const minYear = 2023;
+  for (let y = currentYear; y >= minYear; y--) {
+    const opt = document.createElement('option');
+    opt.value = String(y);
+    opt.textContent = String(y);
+    yearSelect.appendChild(opt);
+  }
+  yearSelect.value = String(currentYear);
+
+  function setText(id, text){ $(id).textContent = text; }
+
+  function formatFirstLastInitial(fullName) {
+    const s = (fullName || '').trim();
+    if (!s) return '—';
+    const parts = s.split(/\s+/).filter(Boolean);
+    if (parts.length === 1) return parts[0];
+    const first = parts[0];
+    const last = parts[parts.length - 1];
+    const initial = last ? last[0].toUpperCase() : '';
+    return initial ? `${first} ${initial}.` : first;
+  }
+
+  function niceStep(rawMax) {
+    if (rawMax <= 25) return 5;
+    if (rawMax <= 60) return 10;
+    if (rawMax <= 150) return 25;
+    if (rawMax <= 300) return 50;
+    if (rawMax <= 700) return 100;
+    if (rawMax <= 1500) return 250;
+    if (rawMax <= 3000) return 500;
+    return 1000;
+  }
+
+  function drawLineChart(canvasId, labels, values, opts = {}) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    const cssWidth = canvas.parentElement.getBoundingClientRect().width;
+    const cssHeight = canvas.height;
+
+    canvas.width = Math.floor(cssWidth * dpr);
+    canvas.height = Math.floor(cssHeight * dpr);
+
+    const ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const w = cssWidth;
+    const h = cssHeight;
+
+    const padL = 52, padR = 14, padT = 10, padB = 32;
+
+    const rawMax = Math.max(1, ...values);
+    const step = niceStep(rawMax);
+    const maxVal = Math.ceil(rawMax / step) * step;
+
+    const x0 = padL, x1 = w - padR;
+    const y0 = h - padB, y1 = padT;
+
+    const xStep = (x1 - x0) / Math.max(1, (values.length - 1));
+    const yScale = (y0 - y1) / (maxVal - 0);
+
+    const fmtY = typeof opts.yFormatter === 'function' ? opts.yFormatter : (v) => String(v);
+
+    ctx.clearRect(0, 0, w, h);
+
+    // grid + y labels
+    ctx.strokeStyle = 'rgba(255,255,255,.10)';
+    ctx.lineWidth = 1;
+
+    ctx.fillStyle = 'rgba(255,255,255,.65)';
+    ctx.font = '12px system-ui, -apple-system, Segoe UI, Roboto, Arial';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+
+    const ticks = 4;
+    for (let i = 0; i <= ticks; i++) {
+      const t = i / ticks;
+      const y = y0 - (y0 - y1) * t;
+
+      ctx.beginPath();
+      ctx.moveTo(x0, y);
+      ctx.lineTo(x1, y);
+      ctx.stroke();
+
+      const val = Math.round(maxVal * t);
+      ctx.fillText(fmtY(val), x0 - 10, y);
+    }
+
+    // axis line
+    ctx.strokeStyle = 'rgba(255,255,255,.12)';
+    ctx.beginPath();
+    ctx.moveTo(x0, y1);
+    ctx.lineTo(x0, y0);
+    ctx.stroke();
+
+    // line
+    ctx.strokeStyle = 'rgba(120,255,214,.85)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    values.forEach((v, i) => {
+      const x = x0 + xStep * i;
+      const y = y0 - (v * yScale);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    // points
+    ctx.fillStyle = 'rgba(88,154,255,.95)';
+    values.forEach((v, i) => {
+      const x = x0 + xStep * i;
+      const y = y0 - (v * yScale);
+      ctx.beginPath();
+      ctx.arc(x, y, 3, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // x labels (show all if wide)
+    ctx.fillStyle = 'rgba(255,255,255,.65)';
+    ctx.font = '12px system-ui, -apple-system, Segoe UI, Roboto, Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'alphabetic';
+
+    const showAll = w >= 760;
+    labels.forEach((lab, i) => {
+      if (!showAll && labels.length > 8 && i % 2 === 1) return;
+      const x = x0 + xStep * i;
+      ctx.fillText(lab, x, h - 10);
+    });
+  }
+
+  function renderAirframes(list){
+    const wrap = $('airframes');
+    wrap.innerHTML = '';
+
+    if (!Array.isArray(list) || list.length === 0) {
+      wrap.textContent = 'No airframe breakdown available (or schema differs).';
+      return;
+    }
+
+    const max = Math.max(...list.map(x => Number(x.hours || 0)));
+
+    list.forEach(row => {
+      const airframe = row.airframe ?? '—';
+      const hours = Number(row.hours || 0);
+
+      const r = document.createElement('div');
+      r.className = 'barRow';
+
+      const l = document.createElement('div');
+      l.className = 'barLabel';
+      l.textContent = airframe;
+
+      const bw = document.createElement('div');
+      bw.className = 'barWrap';
+
+      const bf = document.createElement('div');
+      bf.className = 'barFill';
+      bf.style.width = (max > 0 ? (hours / max * 100) : 0) + '%';
+      bw.appendChild(bf);
+
+      const v = document.createElement('div');
+      v.className = 'barValue';
+      v.textContent = nf1.format(hours) + 'h';
+
+      r.appendChild(l);
+      r.appendChild(bw);
+      r.appendChild(v);
+
+      wrap.appendChild(r);
+    });
+  }
+
+  function renderLandingList(elId, list, mode){
+    const el = $(elId);
+    if (!el) return;
+
+    el.innerHTML = '';
+
+    if (!Array.isArray(list) || list.length === 0) {
+      el.textContent = 'No data yet.';
+      return;
+    }
+
+    list.forEach(row => {
+      const pilotNum = row.pilot_id ?? row.user_id ?? '—';
+      const pilotTag = `C${pilotNum}`;
+      const name = formatFirstLastInitial(row.pilot_name);
+      const rate = Number(row.landing_rate);
+
+      const r = document.createElement('div');
+      r.className = 'lrRow';
+
+      const p = document.createElement('div');
+      p.className = 'lrPilot';
+      p.textContent = pilotTag;
+
+      const n = document.createElement('div');
+      n.className = 'lrName';
+      n.textContent = name;
+
+      const v = document.createElement('div');
+      v.className = 'lrRate ' + (mode === 'best' ? 'good' : 'bad');
+      v.textContent = isFinite(rate) ? `${rate.toLocaleString()} ft/min` : '—';
+
+      r.appendChild(p);
+      r.appendChild(n);
+      r.appendChild(v);
+
+      el.appendChild(r);
+    });
+  }
+
+  function renderPilotList(elId, list, kind){
+    const el = $(elId);
+    if (!el) return;
+
+    el.innerHTML = '';
+
+    if (!Array.isArray(list) || list.length === 0) {
+      el.textContent = 'No data yet.';
+      return;
+    }
+
+    list.forEach(row => {
+      const pilotNum = row.pilot_id ?? row.user_id ?? '—';
+      const pilotTag = `C${pilotNum}`;
+      const name = formatFirstLastInitial(row.pilot_name);
+
+      const flights = Number(row.flights || 0);
+      const hours = Number(row.hours || 0);
+
+      const r = document.createElement('div');
+      r.className = 'lbRow';
+
+      const p = document.createElement('div');
+      p.className = 'lbPilot';
+      p.textContent = pilotTag;
+
+      const n = document.createElement('div');
+      n.className = 'lbName';
+      n.textContent = name;
+
+      const v = document.createElement('div');
+      v.className = 'lbVal';
+      v.textContent = (kind === 'hours')
+        ? `${hours.toLocaleString(undefined, {maximumFractionDigits: 1})}h`
+        : `${flights.toLocaleString()}`;
+
+      r.appendChild(p);
+      r.appendChild(n);
+      r.appendChild(v);
+
+      el.appendChild(r);
+    });
+  }
+
+  function metricMeta(metric){
+    if (metric === 'hours') {
+      return {
+        title: 'Hours Per Month',
+        yFormatter: (v) => v.toLocaleString(),
+        value: (m) => Number(m?.hours || 0),
+        sub: (vals) => {
+          const total = vals.reduce((a,b)=>a+b,0);
+          const peak = vals.length ? Math.max(...vals) : 0;
+          return `${total.toLocaleString(undefined,{maximumFractionDigits:1})} hours • Peak: ${peak.toLocaleString(undefined,{maximumFractionDigits:1})}h`;
+        }
+      };
+    }
+    if (metric === 'miles') {
+      return {
+        title: 'Miles Per Month',
+        yFormatter: (v) => v.toLocaleString(),
+        value: (m) => Number(m?.miles || 0),
+        sub: (vals) => {
+          const total = vals.reduce((a,b)=>a+b,0);
+          const peak = vals.length ? Math.max(...vals) : 0;
+          return `${total.toLocaleString(undefined,{maximumFractionDigits:1})} miles • Peak: ${peak.toLocaleString(undefined,{maximumFractionDigits:1})} mi`;
+        }
+      };
+    }
+    return {
+      title: 'Flights Per Month',
+      yFormatter: (v) => v.toLocaleString(),
+      value: (m) => Number(m?.flights || 0),
+      sub: (vals) => {
+        const total = vals.reduce((a,b)=>a+b,0);
+        const peak = vals.length ? Math.max(...vals) : 0;
+        return `${total.toLocaleString()} flights • Peak: ${peak.toLocaleString()} flights`;
+      }
+    };
+  }
+
+  function updateChart(){
+    if (!currentData) return;
+
+    const monthly = Array.isArray(currentData.monthly) ? currentData.monthly : [];
+    const metric = metricSelect.value;
+    const meta = metricMeta(metric);
+
+    let labels = monthly.map(m => m.label ?? '');
+    let values = monthly.map(m => meta.value(m));
+
+    // For calendar years: expand through last month with value.
+    // For lifetime rolling series: show all labels.
+    const isRolling = String(currentData.monthly_mode || '').toLowerCase().includes('rolling');
+    if (!isRolling) {
+      let last = 0;
+      for (let i = 0; i < values.length; i++) if (values[i] > 0) last = i;
+      labels = labels.slice(0, Math.max(1, last + 1));
+      values = values.slice(0, Math.max(1, last + 1));
+    }
+
+    $('chartTitle').textContent = meta.title;
+    $('chartSub').textContent = meta.sub(values);
+
+    drawLineChart('trendChart', labels, values, { yFormatter: meta.yFormatter });
+  }
+
+  function buildMonthSelectOptions(yearNumber, monthToSelect){
+    isSettingMonth = true;
+
+    const disableFuture = (yearNumber === currentYear);
+    const zeroLabel = (yearNumber === 0) ? 'Lifetime' : 'Year';
+
+    monthSelectEls.forEach(sel => {
+      sel.innerHTML = '';
+
+      const optZero = document.createElement('option');
+      optZero.value = '0';
+      optZero.textContent = zeroLabel;
+      sel.appendChild(optZero);
+
+      for (let m = 1; m <= 12; m++) {
+        const opt = document.createElement('option');
+        opt.value = String(m);
+        opt.textContent = monthNames[m - 1];
+
+        if (disableFuture && m > currentMonth) opt.disabled = true;
+
+        sel.appendChild(opt);
+      }
+
+      sel.value = String(monthToSelect ?? 0);
+    });
+
+    selectedMonth = Number(monthToSelect ?? 0);
+    isSettingMonth = false;
+  }
+
+  function setMonthLabels(label){
+    $('monthLabelA').textContent = label;
+    $('monthLabelB').textContent = label;
+    $('monthLabelC').textContent = label;
+    $('monthLabelD').textContent = label;
+  }
+
+  async function loadYear(year, month = 0){
+    setText('lead', 'Loading…');
+    ['pilots','flights','hours','miles','currentlyFlying'].forEach(id => setText(id,'—'));
+    $('airframes').textContent = 'Loading…';
+    $('bestLandings').textContent = 'Loading…';
+    $('worstLandings').textContent = 'Loading…';
+    $('topFlights').textContent = 'Loading…';
+    $('topHours').textContent = 'Loading…';
+
+    // Hide live card until we confirm current-year selection
+    if (liveCard) liveCard.classList.add('isHidden');
+
+    let url = `https://crew.vuscg.com/api/stats-year.php?year=${encodeURIComponent(year)}`;
+    if (month !== null && month !== undefined) {
+      const m = Number(month);
+      if (m >= 0 && m <= 12) url += `&month=${encodeURIComponent(m)}`;
+    }
+
+    const res = await fetch(url, { cache: 'no-store' });
+    const data = await res.json();
+
+    if (!data || !data.ok) {
+      setText('lead', 'Could not load stats.');
+      $('airframes').textContent = '—';
+      $('bestLandings').textContent = '—';
+      $('worstLandings').textContent = '—';
+      $('topFlights').textContent = '—';
+      $('topHours').textContent = '—';
+      return;
+    }
+
+    currentData = data;
+
+    // --- UI FIX: keep dropdown on Year/Lifetime when month=0 ---
+    const requestedMonth = (month !== null && month !== undefined) ? Number(month) : null;
+    const effectiveMonth =
+      (requestedMonth === 0 || (requestedMonth >= 1 && requestedMonth <= 12))
+        ? requestedMonth
+        : (data.month !== undefined && data.month !== null ? Number(data.month) : 0);
+
+    buildMonthSelectOptions(Number(data.year), effectiveMonth);
+
+    const fallbackLabel =
+      (effectiveMonth === 0)
+        ? (Number(data.year) === 0 ? 'Lifetime' : 'Year')
+        : (monthNames[effectiveMonth - 1] || '—');
+
+    setMonthLabels(data.month_label || fallbackLabel);
+
+    // Titles
+    const yearLabel = (Number(data.year) === 0) ? 'Lifetime' : String(data.year);
+    setText('kicker', `${yearLabel} At a Glance`);
+    setText('title', `vUSCG ${yearLabel} Stats`);
+    setText('updatedAt', new Date(data.updated_at).toLocaleString());
+
+    setText('pilots', nf.format(data.pilots ?? 0));
+    setText('flights', nf.format(data.flights ?? 0));
+    setText('hours', nf1.format(data.hours ?? 0));
+    setText('miles', nf1.format(data.miles ?? 0));
+    setText('hoursDisplay', data.hours_display ? `(${data.hours_display})` : '—');
+
+    // Live card only for current year (not Lifetime)
+    if (liveCard) {
+      const selectedYear = Number(year);
+      liveCard.classList.toggle('isHidden', selectedYear !== currentYear);
+    }
+    setText('currentlyFlying', nf.format(data.currently_flying ?? 0));
+
+    // Lead copy
+    if (Number(data.year) === 0) {
+      setText('lead', `All-time totals based on completed PIREPs. Use the dropdowns to filter the “month” cards.`);
+    } else {
+      setText('lead', `Year-to-date totals based on completed PIREPs in ${yearLabel}. Use the dropdowns to filter the “month” cards.`);
+    }
+
+    // Month drilldowns (API fields)
+    renderLandingList('bestLandings', data.month_best_landings, 'best');
+    renderLandingList('worstLandings', data.month_worst_landings, 'worst');
+    renderPilotList('topFlights', data.month_top_flights, 'flights');
+    renderPilotList('topHours', data.month_top_hours, 'hours');
+
+    // Airframes + chart
+    renderAirframes(data.top_airframes);
+    updateChart();
+  }
+
+  // Month dropdown sync
+  monthSelectEls.forEach(sel => {
+    sel.addEventListener('change', () => {
+      if (isSettingMonth) return;
+      const m = Number(sel.value); // 0..12
+      monthSelectEls.forEach(s => { s.value = String(m); });
+      selectedMonth = m;
+      loadYear(yearSelect.value, selectedMonth);
+    });
+  });
+
+  // Year dropdown change => default month selection to 0 (Year/Lifetime)
+  yearSelect.addEventListener('change', () => {
+    selectedMonth = 0;
+    loadYear(yearSelect.value, 0);
+  });
+
+  metricSelect.addEventListener('change', () => updateChart());
+
+  // redraw chart on resize
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(updateChart, 120);
+  });
+
+  // Initial load
+  loadYear(yearSelect.value, 0);
+})();
+</script>
+</body>
+</html>

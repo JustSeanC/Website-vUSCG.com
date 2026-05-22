@@ -17,7 +17,8 @@
 	<ul>
 		<li><a href="fleet.html">Fleet</a></li>
 		<li><a href="districts.html">Districts</a></li>
-		<li><a href="2025.html">2025 Stats</a></li>
+		<li><a href="2025.html">2025 Review</a></li>
+		<li><a href="yearlystats.html">Yearly Stats</a></li>
 	</ul>
 	</li>
 	<li><a href="https://crew.vuscg.com/pilots">Roster</a></li>

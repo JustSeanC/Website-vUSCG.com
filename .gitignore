@@ -6,3 +6,6 @@ api/home-stats.config.php
 
 # Runtime cache output
 cache/*.json
+error_log
+*.log
+cache/
