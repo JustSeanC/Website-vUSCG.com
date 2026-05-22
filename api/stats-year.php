@@ -111,6 +111,14 @@ try {
             $row = $byMonth[$m] ?? null;
             $monthly[] = ['label' => gmdate('M', gmmktime(0,0,0,$m,1,2000)), 'flights' => (int)($row['flights'] ?? 0), 'hours' => round((float)($row['hours'] ?? 0), 1), 'miles' => round((float)($row['miles'] ?? 0), 1)];
         }
+    } else {
+        $ySql = "SELECT YEAR(submitted_at) AS y, COUNT(*) AS flights, COALESCE(SUM(flight_time),0)/60.0 AS hours, COALESCE(SUM(distance),0) AS miles FROM pireps WHERE submitted_at IS NOT NULL GROUP BY YEAR(submitted_at) ORDER BY YEAR(submitted_at)";
+        $yRows = $pdo->query($ySql)->fetchAll() ?: [];
+        foreach ($yRows as $r) {
+            $yy = (int)($r['y'] ?? 0);
+            if ($yy <= 0) continue;
+            $monthly[] = ['label' => (string)$yy, 'flights' => (int)($r['flights'] ?? 0), 'hours' => round((float)($r['hours'] ?? 0), 1), 'miles' => round((float)($r['miles'] ?? 0), 1)];
+        }
     }
 
     $topAirframes = [];
@@ -143,7 +151,7 @@ try {
         'year' => $year,
         'month' => $month,
         'month_label' => $monthLabel,
-        'monthly_mode' => ($year === 0 ? 'rolling' : 'calendar'),
+        'monthly_mode' => ($year === 0 ? 'yearly' : 'calendar'),
         'pilots' => (int)($summary['pilots'] ?? 0),
         'active_pilots_90d' => $activePilots90,
         'flights' => (int)($summary['flights'] ?? 0),

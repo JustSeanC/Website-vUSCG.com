@@ -335,7 +335,7 @@
       </div>
 
       <div class="card span-12">
-        <div class="label">Top Airframes by Hours (incl. GA7C)</div>
+        <div class="label">Top Airframes by Hours</div>
         <div id="airframes" class="sub" style="margin-top:10px;">Loading…</div>
         <div id="trainingAirframes" class="sub" style="margin-top:14px;"></div>
         <div id="auxAirframes" class="sub" style="margin-top:14px;"></div>
@@ -702,10 +702,10 @@
     });
   }
 
-  function metricMeta(metric){
+  function metricMeta(metric, useYearlyLabels = false){
     if (metric === 'hours') {
       return {
-        title: 'Hours Per Month',
+        title: useYearlyLabels ? 'Hours Per Year' : 'Hours Per Month',
         yFormatter: (v) => v.toLocaleString(),
         value: (m) => Number(m?.hours || 0),
         sub: (vals) => {
@@ -717,7 +717,7 @@
     }
     if (metric === 'miles') {
       return {
-        title: 'Miles Per Month',
+        title: useYearlyLabels ? 'Miles Per Year' : 'Miles Per Month',
         yFormatter: (v) => v.toLocaleString(),
         value: (m) => Number(m?.miles || 0),
         sub: (vals) => {
@@ -728,7 +728,7 @@
       };
     }
     return {
-      title: 'Flights Per Month',
+      title: useYearlyLabels ? 'Flights Per Year' : 'Flights Per Month',
       yFormatter: (v) => v.toLocaleString(),
       value: (m) => Number(m?.flights || 0),
       sub: (vals) => {
@@ -744,7 +744,8 @@
 
     const monthly = Array.isArray(currentData.monthly) ? currentData.monthly : [];
     const metric = metricSelect.value;
-    const meta = metricMeta(metric);
+    const useYearlyLabels = Number(currentData.year) === 0 && String(currentData.monthly_mode || '').toLowerCase().includes('yearly');
+    const meta = metricMeta(metric, useYearlyLabels);
 
     let labels = monthly.map(m => m.label ?? '');
     let values = monthly.map(m => meta.value(m));
