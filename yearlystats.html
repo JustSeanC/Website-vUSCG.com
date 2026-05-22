@@ -335,7 +335,7 @@
       </div>
 
       <div class="card span-12">
-        <div class="label">Top Airframes by Hours</div>
+        <div class="label">Top Airframes by Hours (incl. GA7C)</div>
         <div id="airframes" class="sub" style="margin-top:10px;">Loading…</div>
         <div id="trainingAirframes" class="sub" style="margin-top:14px;"></div>
         <div id="auxAirframes" class="sub" style="margin-top:14px;"></div>
@@ -631,7 +631,7 @@
 
     list.forEach(row => {
       const pilotNum = row.pilot_id ?? row.user_id ?? '—';
-      const pilotTag = `GA7C${pilotNum}`;
+      const pilotTag = `C${pilotNum}`;
       const name = formatFirstLastInitial(row.pilot_name);
       const rate = Number(row.landing_rate);
 
@@ -671,7 +671,7 @@
 
     list.forEach(row => {
       const pilotNum = row.pilot_id ?? row.user_id ?? '—';
-      const pilotTag = `GA7C${pilotNum}`;
+      const pilotTag = `C${pilotNum}`;
       const name = formatFirstLastInitial(row.pilot_name);
 
       const flights = Number(row.flights || 0);
