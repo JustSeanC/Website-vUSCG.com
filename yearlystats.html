@@ -846,7 +846,7 @@
     // Hide live card until we confirm current-year selection
     if (liveCard) liveCard.classList.add('isHidden');
 
-    let url = `https://crew.vuscg.com/api/stats-year.php?year=${encodeURIComponent(year)}`;
+    let url = `https://vuscg.com/api/stats-year.php?year=${encodeURIComponent(year)}`;
     if (month !== null && month !== undefined) {
       const m = Number(month);
       if (m >= 0 && m <= 12) url += `&month=${encodeURIComponent(m)}`;
