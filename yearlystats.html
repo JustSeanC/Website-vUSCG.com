@@ -554,34 +554,12 @@
   }
 
 
-  function splitAirframes(list){
-    const trainingKeywords = ['TH-57','TH57','TRAIN','BELL'];
-    const auxKeywords = ['AUX','AUXILIARY'];
-    const primary = [];
-    const training = [];
-    const aux = [];
-
-    (Array.isArray(list) ? list : []).forEach(row => {
-      const frame = String(row?.airframe || '').toUpperCase();
-      const airport = String(row?.airport || row?.dep_icao || row?.arr_icao || '').toUpperCase();
-      const isNDZ = airport.includes('NDZ');
-      const isTraining = trainingKeywords.some(k => frame.includes(k));
-      const isAux = auxKeywords.some(k => frame.includes(k));
-
-      if (isAux) aux.push(row);
-      else if (isTraining || (isNDZ && frame.includes('BELL'))) training.push(row);
-      else primary.push(row);
-    });
-
-    return { primary, training, aux };
-  }
-
-  function renderAirframes(list){
-    const wrap = $('airframes');
+  function renderAirframes(list, elId = 'airframes', emptyMessage = 'No airframe breakdown available.'){
+    const wrap = $(elId);
     wrap.innerHTML = '';
 
     if (!Array.isArray(list) || list.length === 0) {
-      wrap.textContent = 'No airframe breakdown available (or schema differs).';
+      wrap.textContent = emptyMessage;
       return;
     }
 
@@ -918,14 +896,9 @@
     renderPilotList('topHours', data.month_top_hours, 'hours');
 
     // Airframes + chart
-    const split = splitAirframes(data.top_airframes);
-    renderAirframes(split.primary);
-    if (split.training.length) {
-      $('trainingAirframes').textContent = `Training fleet separated (${split.training.length} entries filtered, including NDZ Bell/training aircraft).`;
-    }
-    if (split.aux.length) {
-      $('auxAirframes').textContent = `Aux air stats separated (${split.aux.length} entries).`;
-    }
+    renderAirframes(data.top_airframes, 'airframes', 'No primary-fleet airframe data.');
+    renderAirframes(data.top_airframes_training, 'trainingAirframes', 'No training-fleet airframe data.');
+    renderAirframes(data.top_airframes_aux, 'auxAirframes', 'No Aux Air airframe data.');
     updateChart();
   }
 
