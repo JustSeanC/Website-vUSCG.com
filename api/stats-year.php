@@ -64,6 +64,42 @@ function has_col(array $cols, string $name): bool {
     return in_array(strtolower($name), $cols, true);
 }
 
+function fetch_currently_flying_from_home_stats(string $url): int {
+    if ($url === '') return 0;
+
+    $body = null;
+
+    if (function_exists('curl_init')) {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_TIMEOUT => 6,
+        ]);
+        $res = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($res !== false && $status >= 200 && $status < 300) {
+            $body = (string)$res;
+        }
+    }
+
+    if ($body === null) {
+        $res = @file_get_contents($url);
+        if ($res !== false) {
+            $body = (string)$res;
+        }
+    }
+
+    if ($body === null || $body === '') return 0;
+
+    $json = json_decode($body, true);
+    if (!is_array($json)) return 0;
+
+    $val = $json['currently_flying'] ?? $json['data']['currently_flying'] ?? null;
+    return is_numeric($val) ? (int)$val : 0;
+}
+
 try {
     $year = isset($_GET['year']) ? (int)$_GET['year'] : (int)gmdate('Y');
     $month = isset($_GET['month']) ? clamp_int($_GET['month'], 0, 12) : 0;
@@ -115,6 +151,8 @@ try {
 
     $active90Sql = "SELECT COUNT(DISTINCT user_id) AS active_pilots_90d FROM pireps WHERE submitted_at >= (UTC_TIMESTAMP() - INTERVAL 90 DAY)" . ($hasAccepted ? " AND accepted = 1" : "");
     $activePilots90 = (int)($pdo->query($active90Sql)->fetch()['active_pilots_90d'] ?? 0);
+
+    $currentlyFlying = fetch_currently_flying_from_home_stats('https://crew.vuscg.com/api/stats-home.php');
 
     $yearLabel = ($year === 0) ? 'Lifetime' : (string)$year;
     $monthLabel = ($month === 0) ? $yearLabel : gmdate('M', gmmktime(0, 0, 0, $month, 1, 2000));
@@ -279,7 +317,7 @@ try {
         'hours' => round(((float)($summary['total_minutes'] ?? 0)) / 60, 1),
         'miles' => round((float)($summary['miles'] ?? 0), 1),
         'hours_display' => format_minutes((int)round((float)($summary['total_minutes'] ?? 0))),
-        'currently_flying' => 0,
+        'currently_flying' => $currentlyFlying,
         'top_airframes' => $topAirframes,
         'top_airframes_training' => $topAirframesTraining,
         'top_airframes_aux' => $topAirframesAux,
